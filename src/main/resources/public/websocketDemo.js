@@ -14,6 +14,19 @@ canvas.addEventListener('click', function(e) {
   draw(pos)
 }, false);
 
+setInterval(myMethod, 10);
+
+var frame = 0;
+function myMethod() {
+  var ctx = canvas.getContext("2d");
+  ctx.font = "30px Arial";
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillText(frame.toString(), 10, 50);
+  ctx.fillText("hiooo", 10, 150);
+  frame++;
+}
+
+
 function update(msg) {
   var data = JSON.parse(msg.data);
   if (data.point) {
@@ -52,7 +65,7 @@ function id(id) {
 function draw(pos) {
   posx = pos.x;
   posy = pos.y;
-  context.fillStyle = "#000000";
+  context.fillStyle = "#010101";
   context.globalAlpha = 0.5;
   context.beginPath();
   context.arc(posx, posy, 50, 0, 2 * Math.PI);
