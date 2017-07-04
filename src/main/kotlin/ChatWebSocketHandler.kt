@@ -28,8 +28,15 @@ class ChatWebSocketHandler {
 
     @OnWebSocketMessage
     fun onMessage(user: Session, message: String) {
-        broadcastMessage(sender = userUsernameMap.get(user) ?: "undefiend", message = message)
+        userUsernameMap.keys.stream().filter({ it.isOpen() && it != user }).forEach { session ->
+            try {
+                session.remote.sendString(JSONObject().put("point", JSONObject(message)).toString())
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
+
 
     //Sends a message from one user to all users, along with a list of current usernames
     fun broadcastMessage(sender: String, message: String) {
