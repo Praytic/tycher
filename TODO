@@ -1,0 +1,10 @@
+make a loop
+make it count every second
+
+each player has a sprite he can move with arrow keys
+frontends only does these things:
+1) sends control inputs to backend
+2) runs the game loop
+3) renders using it's own game loop
+4) recieves data from backend and corrects any discrepancies
+
