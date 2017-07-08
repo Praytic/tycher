@@ -14,6 +14,11 @@ canvas.addEventListener('click', function(e) {
   draw(pos)
 }, false);
 
+window.onbeforeunload = function() {
+  webSocket.close();
+  return null;
+};
+
 function update(msg) {
   var data = JSON.parse(msg.data);
   if (data.point) {

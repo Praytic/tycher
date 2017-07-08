@@ -37,7 +37,6 @@ class ChatWebSocketHandler {
         }
     }
 
-
     //Sends a message from one user to all users, along with a list of current usernames
     fun broadcastMessage(sender: String, message: String) {
         userUsernameMap.keys.stream().filter({ it.isOpen() }).forEach { session ->
@@ -45,6 +44,8 @@ class ChatWebSocketHandler {
                 session.remote.sendString(JSONObject()
                         .put("userMessage", createHtmlMessageFromSender(sender, message))
                         .put("userlist", userUsernameMap.values).toString())
+            } catch (e: WebSocketException) {
+                session.close()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
