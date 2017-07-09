@@ -3,6 +3,7 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage
 import org.eclipse.jetty.websocket.api.annotations.WebSocket
+import org.json.JSONArray
 import org.json.JSONObject
 
 @WebSocket
@@ -35,7 +36,13 @@ class GameHandler {
     }
 
     fun scoreboard(session: Session, limit: Int) {
-        val users = users.values.filterNotNull().sortedByDescending { it.score }.take(limit)
-        session.remote.sendString(JSONObject().put("scoreboard", users).toString())
+        val users = users.values
+                .filterNotNull()
+                .sortedByDescending { it.score }
+                .take(limit)
+                .map { JSONObject()
+                        .put("username", it.name)
+                        .put("score", it.score).toString() }
+        session.remote.sendString(JSONObject().put("scoreboard", JSONArray(users)).toString())
     }
 }
