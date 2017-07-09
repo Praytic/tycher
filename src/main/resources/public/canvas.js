@@ -1,13 +1,20 @@
 //Establish the WebSocket connection and set up event handlers
-var webSocket = new WebSocket("ws://" + location.hostname + ":" + "4567" + "/game");
-webSocket.onmessage = function (msg) {
-  update(msg);
+let game = new WebSocket("ws://" + location.hostname + ":" + "4567" + "/game");
+let board = new WebSocket("ws://" + location.hostname + ":" + "4567" + "/board");
+
+game.onmessage = function (msg) {
+  let data = JSON.parse(msg.data);
+  if (data.scoreboard) {
+    id("userlist").innerHTML = "";
+    data.scoreboard.forEach(function (entry) {
+      insert("userlist", "<li>" + entry.username + " [" + entry.score + "]" + "</li>");
+    });
+  }
 };
-webSocket.onclose = function () {
-  alert("WebSocket connection closed")
-};
-var canvas = document.getElementById("myCanvas");
-var context = canvas.getContext("2d");
+
+let canvas = document.getElementById("myCanvas");
+let context = canvas.getContext("2d");
+
 canvas.addEventListener('click', function(e) {
   var pos = getMousePos(canvas, e);
   webSocket.send(JSON.stringify(pos));
@@ -18,20 +25,6 @@ window.onbeforeunload = function() {
   webSocket.close();
   return null;
 };
-
-function update(msg) {
-  var data = JSON.parse(msg.data);
-  if (data.point) {
-    draw(data.point)
-  }
-  else {
-    insert("chat", data.userMessage);
-    id("userlist").innerHTML = "";
-    data.userlist.forEach(function (user) {
-      insert("userlist", "<li>" + user + "</li>");
-    });
-  }
-}
 
 //Update the chat-panel, and the list of connected users
 function updateChat(msg) {
