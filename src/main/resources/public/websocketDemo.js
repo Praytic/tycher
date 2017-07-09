@@ -1,5 +1,5 @@
 //Establish the WebSocket connection and set up event handlers
-var webSocket = new WebSocket("ws://" + location.hostname + ":" + "4567" + "/chat");
+var webSocket = new WebSocket("ws://" + location.hostname + ":" + "4567" + "/game");
 webSocket.onmessage = function (msg) {
   update(msg);
 };
