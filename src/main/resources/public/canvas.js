@@ -1,34 +1,30 @@
 //Establish the WebSocket connection and set up event handlers
-var webSocket = new WebSocket("ws://" + location.hostname + ":" + "4567" + "/chat");
-webSocket.onmessage = function (msg) {
-  updateChat(msg);
-};
-webSocket.onclose = function () {
-  alert("WebSocket connection closed")
-};
-var canvas = document.getElementById("myCanvas");
-var context = canvas.getContext("2d");
-canvas.addEventListener('click', draw, false);
+let game = new WebSocket("ws://" + location.hostname + ":" + "4567" + "/game");
+let board = new WebSocket("ws://" + location.hostname + ":" + "4567" + "/board");
 
-//Send message if "Send" is clicked
-id("send").addEventListener("click", function () {
-  sendMessage(id("message").value);
-});
-
-//Send message if enter is pressed in the input field
-id("message").addEventListener("keypress", function (e) {
-  if (e.keyCode === 13) {
-    sendMessage(e.target.value);
+game.onmessage = function (msg) {
+  let data = JSON.parse(msg.data);
+  if (data.scoreboard) {
+    id("userlist").innerHTML = "";
+    data.scoreboard.forEach(function (entry) {
+      insert("userlist", "<li>" + entry.username + " [" + entry.score + "]" + "</li>");
+    });
   }
-});
+};
 
-//Send a message if it's not empty, then clear the input field
-function sendMessage(message) {
-  if (message !== "") {
-    webSocket.send(message);
-    id("message").value = "";
-  }
-}
+let canvas = document.getElementById("myCanvas");
+let context = canvas.getContext("2d");
+
+canvas.addEventListener('click', function(e) {
+  var pos = getMousePos(canvas, e);
+  webSocket.send(JSON.stringify(pos));
+  draw(pos)
+}, false);
+
+window.onbeforeunload = function() {
+  webSocket.close();
+  return null;
+};
 
 //Update the chat-panel, and the list of connected users
 function updateChat(msg) {
@@ -40,6 +36,7 @@ function updateChat(msg) {
   });
 }
 
+
 //Helper function for inserting HTML as the first child of an element
 function insert(targetId, message) {
   id(targetId).insertAdjacentHTML("afterbegin", message);
@@ -50,11 +47,11 @@ function id(id) {
   return document.getElementById(id);
 }
 
-function draw(e) {
-  var pos = getMousePos(canvas, e);
+function draw(pos) {
   posx = pos.x;
   posy = pos.y;
   context.fillStyle = "#000000";
+  context.globalAlpha = 0.5;
   context.beginPath();
   context.arc(posx, posy, 50, 0, 2 * Math.PI);
   context.fill();
