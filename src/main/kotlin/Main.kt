@@ -3,7 +3,6 @@ import com.squareup.moshi.Moshi
 import org.eclipse.jetty.websocket.api.Session
 import spark.Spark.*
 import java.awt.Point
-import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
@@ -30,14 +29,8 @@ data class Tych(val tycher: User,
                 val spawnTime: Long,
                 val dummy: Boolean = false) {
 
-    fun currentRadius(): Double {
-        // NOTE: not sure how spawnTime is determined, but Date().getTime() is milliseconds since Unix epoch
-        var currentTime = Date().getTime() 
-        return initialRadius - shrinkSpeed * (currentTime - spawnTime)
-    }
-
     fun isConsumedBy(tych: Tych): Boolean {
-        return !tych.dummy && currentRadius() < tych.currentRadius()
+        TODO()
     }
 }
 

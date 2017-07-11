@@ -30,11 +30,7 @@ class BoardHandler {
                     tychs.remove(it.key)
                 }
             }
-            "dummy_tych" -> synchronized (this) {
-                val user = users[session] ?:
-                        throw IllegalStateException("Tycher can't be an unauthorized user.")
-                val newDummy = initTych(user, tych)
-            }
+            "dummy_tych" -> TODO()
         }
     }
 
@@ -55,7 +51,7 @@ class BoardHandler {
     }
 
     fun calculateTychRadius(tycher: User): Double {
-        return tycher.score / scale
+        TODO()
     }
 
     fun calculateShrinkSpeed(tycher: User): Double {
@@ -67,8 +63,7 @@ class BoardHandler {
     }
 
     fun calculateScore(tych: Tych): Int {
-        val scale = 1
-        return Math.round(scale * tych.currentRadius()).toInt()
+        TODO()
     }
 }
 
