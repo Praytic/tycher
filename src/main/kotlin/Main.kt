@@ -32,7 +32,7 @@ data class Tych(val tycher: User,
 
     fun currentRadius(): Double {
         // NOTE: not sure how spawnTime is determined, but Date().getTime() is milliseconds since Unix epoch
-        var currentTime = Date().getTime() 
+        val currentTime = Date().getTime()
         return initialRadius - shrinkSpeed * (currentTime - spawnTime)
     }
 

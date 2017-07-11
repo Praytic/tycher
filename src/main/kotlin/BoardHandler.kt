@@ -55,7 +55,7 @@ class BoardHandler {
     }
 
     fun calculateTychRadius(tycher: User): Double {
-        return tycher.score / scale
+        return (tycher.score / scale).toDouble()
     }
 
     fun calculateShrinkSpeed(tycher: User): Double {
@@ -67,7 +67,6 @@ class BoardHandler {
     }
 
     fun calculateScore(tych: Tych): Int {
-        val scale = 1
         return Math.round(scale * tych.currentRadius()).toInt()
     }
 }
