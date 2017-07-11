@@ -37,7 +37,7 @@ data class Tych(val tycher: User,
     }
 
     fun isConsumedBy(tych: Tych): Boolean {
-        return !tych.dummy && currentRadius() < tych.currentRadius()
+        return currentRadius() < tych.currentRadius()
     }
 }
 

@@ -1,4 +1,4 @@
-val scale = 1
+val scoreToRadius = 1
 
 
 
