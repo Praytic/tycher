@@ -7,6 +7,7 @@
     <modules>
         <module>client</module>
         <module>server</module>
+        <module>model</module>
     </modules>
 
     <groupId>com.tycher</groupId>
@@ -88,6 +89,23 @@
                 <artifactId>slf4j-simple</artifactId>
                 <version>${slf4j-simple.version}</version>
             </dependency>
+
+            <!-- Internal -->
+            <dependency>
+                <groupId>com.tycher</groupId>
+                <artifactId>model</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.tycher</groupId>
+                <artifactId>server</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.tycher</groupId>
+                <artifactId>client</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -98,6 +116,28 @@
                     <groupId>org.jetbrains.kotlin</groupId>
                     <artifactId>kotlin-maven-plugin</artifactId>
                     <version>${kotlin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>compile</id>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>compile</goal>
+                            </goals>
+                            <configuration>
+                                <sourceDirs>
+                                    <source>src/main.kotlin.main/java</source>
+                                    <source>src/main.kotlin.main/kotlin</source>
+                                </sourceDirs>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>test-compile</id>
+                            <phase>test-compile</phase>
+                            <goals>
+                                <goal>test-compile</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

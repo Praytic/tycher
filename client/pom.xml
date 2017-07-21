@@ -18,6 +18,10 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-js</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.tycher</groupId>
+            <artifactId>model</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
