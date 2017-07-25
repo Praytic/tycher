@@ -2,6 +2,7 @@ import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
 import kotlin.browser.document
 import kotlin.browser.window
+import kotlin.js.json
 
 val canvas: HTMLCanvasElement by lazy {
     val canvas = document.createElement("canvas") as HTMLCanvasElement
@@ -9,6 +10,13 @@ val canvas: HTMLCanvasElement by lazy {
     context.canvas.width = window.innerWidth
     context.canvas.height = window.innerHeight
     document.body!!.appendChild(canvas)
+    canvas.onclick = { event ->
+        val position = json(
+                Pair("x", event.asDynamic().x),
+                Pair("y", event.asDynamic().y))
+        val tych = json(Pair("tych", position))
+        gameSocket.send(JSON.stringify(tych))
+    }
     canvas
 }
 
@@ -41,13 +49,13 @@ fun drawTych(pos: Position) {
 
 fun renderBackground() {
     cxt.save()
-    cxt.fillStyle = "#0A0A0A"
+    cxt.fillStyle = "#FAFAFA"
     cxt.fillRect(0.0, 0.0, width.toDouble(), height.toDouble())
     cxt.restore()
 }
 
 fun main(args: Array<String>) {
-    Test().test()
+    initWebSockets()
     window.setInterval({
         renderBackground()
     }, 50)
