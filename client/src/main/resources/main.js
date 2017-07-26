@@ -7,8 +7,8 @@ var main = function (_, Kotlin) {
   var json = Kotlin.kotlin.js.json_pyyo18$;
   var lazy = Kotlin.kotlin.lazy_klfg04$;
   function canvas$lambda$lambda(event) {
-    var position = json([new Pair('x', event.x), new Pair('y', event.y)]);
-    var tych = json([new Pair('tych', position)]);
+    var params = [event.x, event.y];
+    var tych = json([new Pair('tych', params)]);
     gameSocket.send(JSON.stringify(tych));
   }
   function canvas$lambda() {
@@ -89,17 +89,43 @@ var main = function (_, Kotlin) {
   Position.prototype.equals = function (other) {
     return this === other || (other !== null && (typeof other === 'object' && (Object.getPrototypeOf(this) === Object.getPrototypeOf(other) && (Kotlin.equals(this.x, other.x) && Kotlin.equals(this.y, other.y)))));
   };
+  function Tych(args) {
+    this.args = args;
+  }
+  Tych.$metadata$ = {
+    kind: Kotlin.Kind.CLASS,
+    simpleName: 'Tych',
+    interfaces: []
+  };
+  Tych.prototype.component1 = function () {
+    return this.args;
+  };
+  Tych.prototype.copy_awc180$ = function (args) {
+    return new Tych(args === void 0 ? this.args : args);
+  };
+  Tych.prototype.toString = function () {
+    return 'Tych(args=' + Kotlin.toString(this.args) + ')';
+  };
+  Tych.prototype.hashCode = function () {
+    var result = 0;
+    result = result * 31 + Kotlin.hashCode(this.args) | 0;
+    return result;
+  };
+  Tych.prototype.equals = function (other) {
+    return this === other || (other !== null && (typeof other === 'object' && (Object.getPrototypeOf(this) === Object.getPrototypeOf(other) && Kotlin.equals(this.args, other.args))));
+  };
   var gameSocket;
   function initWebSockets$lambda(event) {
     var username = window.prompt('Choose username:');
-    var login = json([new Pair('name', username)]);
-    var greetings = json([new Pair('greetings', login)]);
+    var login = json([new Pair('username', username)]);
+    var greetings = json([new Pair('login', login)]);
     gameSocket.send(JSON.stringify(greetings));
     return event;
   }
   function initWebSockets$lambda_0(event) {
-    var data = event.data;
-    var pos = JSON.parse(data);
+    var message = JSON.parse(event.data);
+    var tych = message.tych;
+    var pos = new Position(tych[0], tych[1]);
     drawTych(pos);
     return event;
   }
@@ -123,6 +149,7 @@ var main = function (_, Kotlin) {
   _.renderBackground = renderBackground;
   _.main_kand9s$ = main;
   _.Position = Position;
+  _.Tych = Tych;
   Object.defineProperty(_, 'gameSocket', {
     get: function () {
       return gameSocket;

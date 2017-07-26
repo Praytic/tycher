@@ -1,13 +1,13 @@
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import org.eclipse.jetty.websocket.api.Session
-import org.json.JSONObject
 
-class ScoreboardHandler : MessageHandler() {
+class ScoreboardHandler : MessageHandler<Scoreboard>() {
 
-    override fun handle(session: Session, message: JsonElement) {
-        val scoreboardRequest = fromJson<Scoreboard>(message)
-        val limit = scoreboardRequest.limit
+    override fun parse(message: JsonElement) = gson.fromJson(message, Scoreboard::class.java)
+
+    override fun handle(user: User, session: Session, message: Scoreboard) {
+        val limit = message.limit
         val usersScores = users.values
                 .filterNotNull()
                 .sortedByDescending { it.score }
@@ -16,6 +16,6 @@ class ScoreboardHandler : MessageHandler() {
                 .map { it.name!! to it.score }
                 .toMap()
         val scoreboardResponse = Scoreboard(limit, usersScores)
-        session.remote.sendString(Gson().toJson(scoreboardResponse))
+        session.remote.sendString(gson.toJson(scoreboardResponse))
     }
 }

@@ -1,51 +1,49 @@
-import Command.TYCH
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import org.eclipse.jetty.websocket.api.Session
-import org.json.JSONObject
+import org.eclipse.jetty.websocket.api.WebSocketException
 
-class TychHandler : MessageHandler() {
+class TychHandler : MessageHandler<TychRequest>() {
 
-    override fun handle(session: Session, message: JsonElement) {
-        val user = users[session] ?:
-                throw IllegalStateException("Tycher can't be an unauthorized user.")
-        val userScoreChange = mutableMapOf<User, Int>()
-        val tychRequest = fromJson<TychRequest>(message)
-        val tych = toTych(user, tychRequest)
-        val consumedTychs = consumedTychs(tych)
-        val gainedScore = consumedTychs.values.map { it to calculateScore(it) }.toMap()
-        userScoreChange[user] = gainedScore.entries.sumBy { it.value }
-        consumedTychs.forEach {
-            it.value.tycher.tychIsReady = true
-            userScoreChange[it.value.tycher] = -calculateScore(it.value)
-            tychs.remove(it.key)
-        }
+    override fun parse(message: JsonElement) = gson.fromJson(message, TychRequest::class.java)
+
+    override fun handle(user: User, session: Session, message: TychRequest) {
+        val tych = toTych(user, message)
+        consumeTychs(tych)
+        tychs.add(tych)
         sendTych(tych)
     }
 
+    fun consumeTychs(tych: Tych) {
+        val userScoreChange = mutableMapOf<User, Int>()
+        val consumedTychs = tych.consumedTychs(tychs)
+        val gainedScore = consumedTychs.map { it to it.calculateScore() }.toMap()
+        userScoreChange[tych.tycher] = gainedScore.entries.sumBy { it.value }
+        consumedTychs.forEach {
+            it.tycher.tychIsReady = true
+            userScoreChange[it.tycher] = -it.calculateScore()
+            tychs.remove(it)
+        }
+    }
+
     fun toTych(tycher: User, tychRequest: TychRequest): Tych {
-        val radius = tychRadius(tycher)
-        val shrinkSpeed = shrinkSpeed(tycher)
         val spawnTime = tychRequest.spawnTime
         val position = tychRequest.position
-        return Tych(tycher, position, spawnTime, radius, shrinkSpeed, false)
+        return Tych(tycher, position, spawnTime, dummy = false)
     }
 
     fun sendTych(tych: Tych) {
-        val tychResponse = Gson().toJson(TychResponse(tych))
+        val tychResponse = TychResponse(tych)
         val receivers = users
                 .filter { it.value != null }
                 .filter { it.key.isOpen }
         receivers.forEach({ session, user ->
-            session.remote.sendString(JSONObject().put(TYCH.toString(), tychResponse).toString())
+            try {
+                session.remote.sendString(gson.toJsonMessage(tychResponse))
+            }
+            catch (ex: WebSocketException) {
+                session.close()
+            }
         })
     }
-
-    val shrinkSpeed = { tycher: User -> tycher.score * SCORE_TO_SHRINK_SPEED }
-
-    val tychRadius = { tycher: User -> tycher.score * SCORE_TO_RADIUS }
-
-    val consumedTychs = { tych: Tych -> tychs.filter { it.value.isConsumedBy(tych) } }
-
-    val calculateScore = { tych: Tych -> (tych.currentRadius() / SCORE_TO_RADIUS).toInt() }
 }

@@ -1,0 +1,16 @@
+import com.google.common.base.CaseFormat.LOWER_CAMEL
+import com.google.common.base.CaseFormat.UPPER_UNDERSCORE
+
+/**
+ * [Command] entity is required to map [MessageHandler] to the
+ * json message which is received from frontend.
+ */
+enum class Command {
+    TYCH,
+    DUMMY_TYCH,
+    LOGIN,
+    SCOREBOARD,
+    FOOD;
+
+    override fun toString(): String = UPPER_UNDERSCORE.to(LOWER_CAMEL, super.toString())
+}

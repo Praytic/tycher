@@ -2,6 +2,7 @@ import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
 import kotlin.browser.document
 import kotlin.browser.window
+import kotlin.js.Json
 import kotlin.js.json
 
 val canvas: HTMLCanvasElement by lazy {
@@ -11,10 +12,8 @@ val canvas: HTMLCanvasElement by lazy {
     context.canvas.height = window.innerHeight
     document.body!!.appendChild(canvas)
     canvas.onclick = { event ->
-        val position = json(
-                Pair("x", event.asDynamic().x),
-                Pair("y", event.asDynamic().y))
-        val tych = json(Pair("tych", position))
+        val params = arrayOf(event.asDynamic().x, event.asDynamic().y)
+        val tych = json(Pair("tych", params))
         gameSocket.send(JSON.stringify(tych))
     }
     canvas
