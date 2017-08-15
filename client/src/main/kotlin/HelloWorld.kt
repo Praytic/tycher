@@ -2,17 +2,31 @@ import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
 import kotlin.browser.document
 import kotlin.browser.window
-import kotlin.js.Json
+import kotlin.js.Console
+import kotlin.js.Date
+import kotlin.js.Math
+import kotlin.js.Math.PI
 import kotlin.js.json
 
+val tychs: MutableSet<Tych> = mutableSetOf()
+
+fun Console.logWithTime(vararg o: Any?) {
+    console.log("${Date().getTime()} > ${o}")
+}
+
 val canvas: HTMLCanvasElement by lazy {
+    console.logWithTime("Initializing canvas...")
     val canvas = document.createElement("canvas") as HTMLCanvasElement
     val context = canvas.getContext("2d") as CanvasRenderingContext2D
+
     context.canvas.width = window.innerWidth
     context.canvas.height = window.innerHeight
     document.body!!.appendChild(canvas)
+
     canvas.onclick = { event ->
-        val params = arrayOf(event.asDynamic().x, event.asDynamic().y)
+        val pos = event.asDynamic()
+        console.logWithTime("Canvas click registered at (${pos.x}, ${pos.y}).")
+        val params = arrayOf(pos.x, pos.y)
         val tych = json(Pair("tych", params))
         gameSocket.send(JSON.stringify(tych))
     }
@@ -34,18 +48,6 @@ val height: Int
         return canvas.height
     }
 
-fun drawTych(pos: Position) {
-    cxt.save()
-    // if you using chrome chances are good you wont see the shadow
-    cxt.shadowColor = "#000000"
-    cxt.shadowBlur = 5.0
-    cxt.shadowOffsetX = -4.0
-    cxt.shadowOffsetY = 4.0
-    cxt.fillStyle = "rgb(242,160,110)"
-    cxt.fillText("WOW", pos.x, pos.y)
-    cxt.restore()
-}
-
 fun renderBackground() {
     cxt.save()
     cxt.fillStyle = "#FAFAFA"
@@ -53,9 +55,33 @@ fun renderBackground() {
     cxt.restore()
 }
 
+fun renderTychs() {
+    tychs.forEach {
+        cxt.save()
+        cxt.beginPath()
+        cxt.arc(it.position.x,
+                it.position.y,
+                it.currentRadius,
+                0.0,
+                2.0 * PI)
+        cxt.fillStyle = "rgb(242,160,111)"
+        cxt.fill()
+        cxt.stroke()
+        cxt.restore()
+    }
+}
+
+fun shrinkTychs() {
+    tychs.forEach { it.currentRadius -= it.shrinkSpeed }
+    tychs.filter { it.currentRadius <= 0  }
+}
+
 fun main(args: Array<String>) {
     initWebSockets()
+    console.logWithTime("Starting game loop...")
     window.setInterval({
         renderBackground()
+        renderTychs()
+//        shrinkTychs()
     }, 50)
 }

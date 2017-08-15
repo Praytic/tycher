@@ -12,7 +12,7 @@ abstract class Message(
  */
 data class User(
         val name: String? = null,
-        var score: Int = 0,
+        var score: Int = 100,
         var reloadSpeed: Double = 1.0,
         var tychIsReady: Boolean = true)
 
