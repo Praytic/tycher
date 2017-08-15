@@ -64,7 +64,7 @@ fun renderTychs() {
                 it.currentRadius,
                 0.0,
                 2.0 * PI)
-        cxt.fillStyle = "rgb(242,160,111)"
+        cxt.fillStyle = "rgba(242,160,111, 0.4)"
         cxt.fill()
         cxt.stroke()
         cxt.restore()
@@ -72,8 +72,18 @@ fun renderTychs() {
 }
 
 fun shrinkTychs() {
-    tychs.forEach { it.currentRadius -= it.shrinkSpeed }
-    tychs.filter { it.currentRadius <= 0  }
+    val deadTychs = mutableSetOf<Tych>()
+    tychs.forEach {
+        it.currentRadius -= it.shrinkSpeed
+        if (it.currentRadius <= 0) {
+            deadTychs.add(it)
+        }
+    }
+
+    if (deadTychs.isNotEmpty()) {
+        console.logWithTime("Removing dead tychs...")
+        tychs.removeAll(deadTychs)
+    }
 }
 
 fun main(args: Array<String>) {
@@ -82,6 +92,6 @@ fun main(args: Array<String>) {
     window.setInterval({
         renderBackground()
         renderTychs()
-//        shrinkTychs()
+        shrinkTychs()
     }, 50)
 }

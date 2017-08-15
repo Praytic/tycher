@@ -57,33 +57,32 @@ var main = function (_, Kotlin) {
       get_cxt().save();
       get_cxt().beginPath();
       get_cxt().arc(element.position.x, element.position.y, element.currentRadius, 0.0, 2.0 * Math.PI);
-      get_cxt().fillStyle = 'rgb(242,160,111)';
+      get_cxt().fillStyle = 'rgba(242,160,111, 0.4)';
       get_cxt().fill();
       get_cxt().stroke();
       get_cxt().restore();
     }
   }
   function shrinkTychs() {
+    var deadTychs = Kotlin.kotlin.collections.LinkedHashSet_init_287e2$();
     var tmp$;
     tmp$ = tychs.iterator();
     while (tmp$.hasNext()) {
       var element = tmp$.next();
       element.currentRadius = element.currentRadius - element.shrinkSpeed;
-    }
-    var $receiver = tychs;
-    var destination = Kotlin.kotlin.collections.ArrayList_init_ww73n8$();
-    var tmp$_0;
-    tmp$_0 = $receiver.iterator();
-    while (tmp$_0.hasNext()) {
-      var element_0 = tmp$_0.next();
-      if (element_0.currentRadius <= 0) {
-        destination.add_11rb$(element_0);
+      if (element.currentRadius <= 0) {
+        deadTychs.add_11rb$(element);
       }
+    }
+    if (!deadTychs.isEmpty()) {
+      logWithTime(console, ['Removing dead tychs...']);
+      tychs.removeAll_brywnq$(deadTychs);
     }
   }
   function main$lambda() {
     renderBackground();
     renderTychs();
+    shrinkTychs();
   }
   function main(args) {
     initWebSockets();
