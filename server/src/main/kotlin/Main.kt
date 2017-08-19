@@ -1,14 +1,9 @@
 import Command.*
 import adapter.tychRequestAdapter
 import adapter.tychResponseAdapter
-import com.github.salomonbrys.kodein.Kodein
-import com.github.salomonbrys.kodein.bind
-import com.github.salomonbrys.kodein.singleton
-import com.github.salomonbrys.kotson.plus
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.JsonObject
 import handler.LoginHandler
+import handler.MessageHandler
 import handler.ScoreboardHandler
 import handler.TychHandler
 import org.eclipse.jetty.websocket.api.Session

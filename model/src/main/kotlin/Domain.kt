@@ -53,7 +53,12 @@ data class Tych(
         val SCORE_TO_SHRINK_SPEED = 0.01
     }
 
-    val currentRadius = { radius() - shrinkSpeed() * (Date().getTime() - spawnTime) }
+    constructor(tycher: User, tychRequest: TychRequest) :
+            this(tycher, tychRequest.position, tychRequest.spawnTime)
+
+    val lifeDuration = { (radius() / shrinkSpeed()).toLong() }
+    val lifetime = { Date().getTime() - spawnTime }
+    val currentRadius = { radius() - shrinkSpeed() * lifetime() }
     val isConsumedBy = { tych: Tych -> currentRadius() < tych.currentRadius() }
     val shrinkSpeed = { tycher.score * SCORE_TO_SHRINK_SPEED }
     val radius = { tycher.score * SCORE_TO_RADIUS }

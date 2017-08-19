@@ -9,6 +9,7 @@ import TychRequest
 import User
 import Tych
 import TychResponse
+import putTemp
 import tychs
 import users
 
@@ -20,15 +21,19 @@ class TychHandler : MessageHandler<TychRequest>() {
     override fun parse(message: JsonElement) = gson.fromJson(message, TychRequest::class.java)
 
     override fun handle(user: User, session: Session, message: TychRequest) {
-        val tych = toTych(user, message)
+        val tych = Tych(user, message)
         if (user.clickable.invoke(tychs[user])) {
             consumeTychs(tych)
-            tychs.put(user, tych)
+            tychs.putTemp(user, tych, tych.lifeDuration())
             send(tych)
         }
     }
 
-    fun consumeTychs(tych: Tych) {
+    /**
+     * Removes [Tych]s which were overlapped by specified [tych].
+     * Returns consumed [Tych]s. They will no longer be presented in [tychs].
+     */
+    fun consumeTychs(tych: Tych): List<Tych> {
         val userScoreChange = mutableMapOf<User, Int>()
         val consumedTychs = tych.consumedTychs(tychs.values)
         val gainedScore = consumedTychs.map { it to it.calculateScore() }.toMap()
@@ -38,14 +43,12 @@ class TychHandler : MessageHandler<TychRequest>() {
             userScoreChange[it.tycher] = -it.calculateScore()
             tychs.remove(it.tycher)
         }
+        return consumedTychs
     }
 
-    fun toTych(tycher: User, tychRequest: TychRequest): Tych {
-        val spawnTime = tychRequest.spawnTime
-        val position = tychRequest.position
-        return Tych(tycher, position, spawnTime, isDummy = false)
-    }
-
+    /**
+     * Converts [Tych] to [TychResponse] and sends it to frontend.
+     */
     fun send(tych: Tych) {
         val tychResponse = TychResponse(tych)
         val receivers = users
