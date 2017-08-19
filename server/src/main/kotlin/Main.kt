@@ -1,6 +1,9 @@
 import Command.*
 import adapter.tychRequestAdapter
 import adapter.tychResponseAdapter
+import com.github.salomonbrys.kodein.Kodein
+import com.github.salomonbrys.kodein.bind
+import com.github.salomonbrys.kodein.singleton
 import com.github.salomonbrys.kotson.plus
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -48,14 +51,4 @@ fun main(args: Array<String>) {
     staticFiles.location("/public")
     webSocket("/game", MainWebSocket::class.java)
     init()
-}
-
-/**
- * This method wraps [Message] to another json object providing it
- * the [Command] name and then converts it to json.
- */
-inline fun <reified T : Message> Gson.toJsonMessage(src: T): String {
-    val commandPair = Pair(src.command.toString(), gson.toJsonTree(src, T::class.java))
-    val jsonCommand = JsonObject().plus(commandPair)
-    return gson.toJson(jsonCommand)
 }

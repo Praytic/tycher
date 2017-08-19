@@ -1,11 +1,16 @@
 package websocket
 
+import com.github.salomonbrys.kotson.keys
 import com.google.gson.JsonObject
+import commandHandlerMapper
+import gson
 import org.eclipse.jetty.websocket.api.Session
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage
 import org.eclipse.jetty.websocket.api.annotations.WebSocket
+import users
+import User
 
 /**
  * [MainWebSocket] manages websocket connection and messages which are passed

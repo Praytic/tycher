@@ -24,7 +24,7 @@ class TychHandler : MessageHandler<TychRequest>() {
         if (user.clickable.invoke(tychs[user])) {
             consumeTychs(tych)
             tychs.put(user, tych)
-            sendTych(tych)
+            send(tych)
         }
     }
 
@@ -46,7 +46,7 @@ class TychHandler : MessageHandler<TychRequest>() {
         return Tych(tycher, position, spawnTime, isDummy = false)
     }
 
-    fun sendTych(tych: Tych) {
+    fun send(tych: Tych) {
         val tychResponse = TychResponse(tych)
         val receivers = users
                 .filter { it.value != null }

@@ -10,6 +10,7 @@ buildscript {
         slf4j_version = '1.7.21'
         kotson_version = '2.5.0'
         guava_version = '22.0'
+        kodein_version = '4.1.0'
     }
 
     repositories {
@@ -22,6 +23,7 @@ buildscript {
         classpath "com.sparkjava:spark-core:$spark_version"
         classpath "org.slf4j:slf4j-simple:$slf4j_version"
         classpath "com.google.guava:guava:$guava_version"
+        classpath "com.github.salomonbrys.kodein:kodein:$kodein_version"
     }
 }
 
@@ -32,6 +34,7 @@ repositories {
 }
 
 dependencies {
+    compile "com.github.salomonbrys.kodein:kodein:$kodein_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     compile 'com.github.salomonbrys.kotson:kotson:2.5.0'
     compile "com.j2html:j2html:$j2html_version"
