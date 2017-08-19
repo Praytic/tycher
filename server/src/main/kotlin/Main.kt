@@ -1,13 +1,16 @@
 import Command.*
-import com.github.salomonbrys.kotson.keys
+import adapter.tychRequestAdapter
+import adapter.tychResponseAdapter
 import com.github.salomonbrys.kotson.plus
-import com.github.salomonbrys.kotson.put
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
-import org.eclipse.jetty.util.ConcurrentHashSet
+import handler.LoginHandler
+import handler.ScoreboardHandler
+import handler.TychHandler
 import org.eclipse.jetty.websocket.api.Session
 import spark.Spark.*
+import websocket.MainWebSocket
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -19,11 +22,21 @@ val gson = GsonBuilder()
         .create()
 
 /**
- * Map of [Session]s to [User]s.
+ * Map of [Session]s to [User]s. If the [User] is not presented in this map
+ * then he is treated as unauthorized user.
  */
 val users: MutableMap<Session, User?> = ConcurrentHashMap()
 
-val tychs: MutableSet<Tych> = ConcurrentHashSet()
+/**
+ * Map of [User]s to [Tych]s. Only one [Tych] is permitted per user. [User]
+ * cannot make another [Tych] if he is presented as a key in this map.
+ */
+val tychs: MutableMap<User, Tych> = ConcurrentHashMap()
+
+/**
+ * Map of [Command]s to [MessageHandler]s. Each command should have a
+ * [MessageHandler].
+ */
 val commandHandlerMapper = mapOf(
         TYCH to TychHandler(),
         DUMMY_TYCH to TychHandler(),

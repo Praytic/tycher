@@ -3,13 +3,14 @@ import kotlin.browser.window
 import kotlin.js.Json
 import kotlin.js.json
 
-data class Position(val x: Double, val y: Double)
-data class Tych(val position: Position, var currentRadius: Double, val shrinkSpeed: Double)
-
+/**
+ * The main [WebSocket] for handling user actions.
+ */
 val gameSocket = WebSocket("ws://localhost:4567/game")
 
 fun initWebSockets() {
     console.logWithTime("Init web sockets...")
+
     gameSocket.onopen = { event ->
         console.logWithTime("Open game socket connection.")
         val username = window.prompt("Choose username:")
@@ -18,6 +19,7 @@ fun initWebSockets() {
         gameSocket.send(JSON.stringify(greetings))
         event
     }
+
     gameSocket.onmessage = { event ->
         val message = JSON.parse<Json>(event.asDynamic().data)
         val tych = message.asDynamic().tych

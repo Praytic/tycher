@@ -1,6 +1,11 @@
-import com.google.gson.Gson
+package handler
+
 import com.google.gson.JsonElement
+import gson
 import org.eclipse.jetty.websocket.api.Session
+import users
+import Scoreboard
+import User
 
 class ScoreboardHandler : MessageHandler<Scoreboard>() {
 

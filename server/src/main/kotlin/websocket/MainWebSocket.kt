@@ -1,5 +1,5 @@
-import com.github.salomonbrys.kotson.keys
-import com.google.gson.Gson
+package websocket
+
 import com.google.gson.JsonObject
 import org.eclipse.jetty.websocket.api.Session
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose
@@ -8,18 +8,15 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage
 import org.eclipse.jetty.websocket.api.annotations.WebSocket
 
 /**
- * [MainWebSocket] manages websocket connection and messages
- * which are passed through it.
- *
- * The message is parsed and mapped to the specific [MessageHandler]
- * via the [Command] name.
+ * [MainWebSocket] manages websocket connection and messages which are passed
+ * through it.
  */
 @WebSocket
 class MainWebSocket {
 
     /**
-     * Adds unauthorized [User] to the [users] map when
-     * the connection is opened.
+     * Adds unauthorized [User] to the [users] map when the connection is
+     * opened.
      */
     @OnWebSocketConnect
     fun onConnect(session: Session) {
@@ -40,8 +37,7 @@ class MainWebSocket {
     }
 
     /**
-     * Removes [User] from the [users] map when the connection
-     * is closed.
+     * Removes [User] from the [users] map when the connection is closed.
      */
     @OnWebSocketClose
     fun onClose(session: Session, statusCode: Int, reason: String) {

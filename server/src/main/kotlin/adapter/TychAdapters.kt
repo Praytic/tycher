@@ -1,6 +1,11 @@
+package adapter
+
 import com.github.salomonbrys.kotson.typeAdapter
 import java.lang.UnsupportedOperationException
 import java.util.*
+import TychRequest
+import Position
+import TychResponse
 
 val tychRequestAdapter = typeAdapter<TychRequest> {
     write {

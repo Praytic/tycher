@@ -14,7 +14,13 @@ data class User(
         val name: String? = null,
         var score: Int = 100,
         var reloadSpeed: Double = 1.0,
-        var tychIsReady: Boolean = true)
+        var tychIsReady: Boolean = true) {
+
+    /**
+     * User can click if he has no non-dummy [Tych]s active.
+     */
+    val clickable = { tych: Tych? -> tych == null || tych.isDummy }
+}
 
 /**
  * [Tych] entity which is transferred from frontend to backend.
@@ -40,11 +46,11 @@ data class Tych(
         val tycher: User,
         val position: Position,
         val spawnTime: Long,
-        val dummy: Boolean = false) {
+        val isDummy: Boolean = false) {
 
     companion object {
         val SCORE_TO_RADIUS = 1.0
-        val SCORE_TO_SHRINK_SPEED = 0.1
+        val SCORE_TO_SHRINK_SPEED = 0.01
     }
 
     val currentRadius = { radius() - shrinkSpeed() * (Date().getTime() - spawnTime) }
