@@ -46,7 +46,7 @@ class TychHandler : MessageHandler<TychRequest>() {
     }
 
     /**
-     * Converts [Tych] to [TychResponse] and sends it to frontend.
+     * Converts [Tych] to [TychResponse] and sends it to all clients.
      */
     fun send(tych: Tych) {
         val tychResponse = TychResponse(tych)

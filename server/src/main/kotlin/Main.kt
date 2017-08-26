@@ -1,4 +1,5 @@
 import Command.*
+import adapter.scoreboardRequestAdapter
 import adapter.tychRequestAdapter
 import adapter.tychResponseAdapter
 import com.google.gson.GsonBuilder
@@ -18,9 +19,10 @@ val log = KotlinLogging.logger {}
  * Serialization library.
  */
 val gson = GsonBuilder()
-        .registerTypeAdapter(TychRequest::class.java, tychRequestAdapter)
-        .registerTypeAdapter(TychResponse::class.java, tychResponseAdapter)
-        .create()
+    .registerTypeAdapter(TychRequest::class.java, tychRequestAdapter)
+    .registerTypeAdapter(TychResponse::class.java, tychResponseAdapter)
+    .registerTypeAdapter(Scoreboard::class.java, scoreboardRequestAdapter)
+    .create()
 
 /**
  * Map of [Session]s to [User]s. If the [User] is not presented in this map
@@ -39,14 +41,14 @@ val tychs: MutableMap<User, Tych> = ConcurrentHashMap()
  * [MessageHandler].
  */
 val commandHandlerMapper = mapOf(
-        TYCH to TychHandler(),
-        DUMMY_TYCH to TychHandler(),
-        SCOREBOARD to ScoreboardHandler(),
-        LOGIN to LoginHandler()
+    TYCH to TychHandler(),
+    DUMMY_TYCH to TychHandler(),
+    SCOREBOARD to ScoreboardHandler(),
+    LOGIN to LoginHandler()
 )
 
 fun main(args: Array<String>) {
-    staticFiles.location("/public")
-    webSocket("/game", MainWebSocket::class.java)
-    init()
+  staticFiles.location("/public")
+  webSocket("/game", MainWebSocket::class.java)
+  init()
 }

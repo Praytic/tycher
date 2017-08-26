@@ -22,6 +22,5 @@ fun <K> MutableMap<K, Tych>.putTemp(key: K, value: Tych) {
     put(key, value)
     val lifeDuration = value.lifeDuration()
     Timer(true).schedule(lifeDuration) { remove(key) }
-    log.info { "Put ($key, $value) will be removed after ${lifeDuration/1000}" +
-            " seconds." }
+    log.info { "$value will be removed after ${lifeDuration / 1000} seconds." }
 }

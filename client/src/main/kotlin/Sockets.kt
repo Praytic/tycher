@@ -9,25 +9,27 @@ import kotlin.js.json
 val gameSocket = WebSocket("ws://localhost:4567/game")
 
 fun initWebSockets() {
-    console.logWithTime("Init web sockets...")
+  console.logWithTime("Init web sockets...")
 
-    gameSocket.onopen = { event ->
-        console.logWithTime("Open game socket connection.")
-        val username = window.prompt("Choose username:")
-        val login = json(Pair("username", username))
-        val greetings = json(Pair("login", login))
-        gameSocket.send(JSON.stringify(greetings))
-        event
-    }
+  gameSocket.onopen = { event ->
+    console.logWithTime("Open game socket connection.")
+    val username = window.prompt("Choose username:")
+    val login = json("username" to username)
+    val greetings = json("login" to login)
+    gameSocket.send(JSON.stringify(greetings))
+    event
+  }
 
-    gameSocket.onmessage = { event ->
-        val message = JSON.parse<Json>(event.asDynamic().data)
-        val tych = message.asDynamic().tych
-        console.logWithTime("Message game socket with data: (${tych})")
-        val pos = Position(tych[0], tych[1])
-        val radius = tych[2]
-        val shrinkSpeed = tych[3]
-        tychs.add(Tych(pos, radius, shrinkSpeed))
-        event
+  gameSocket.onmessage = { event ->
+    val message = JSON.parse<Json>(event.asDynamic().data)
+    val tych = message.asDynamic().tych
+    if (tych != null) {
+      handleTych(tych)
     }
+    val sb = message.asDynamic().scoreboard
+    if (sb != null) {
+      handleScoreboard(sb)
+    }
+    event
+  }
 }

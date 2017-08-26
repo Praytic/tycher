@@ -37,8 +37,10 @@ class MainWebSocket {
         val jsonMessage = gson.fromJson(message, JsonObject::class.java)
         val rawCommand = jsonMessage.keys().single()
         val command = Command.valueOf(rawCommand.toUpperCase())
-        commandHandlerMapper[command]?.handle(session, jsonMessage[rawCommand]) ?:
-                throw IllegalArgumentException("No handler was found for the command:\n$command")
+        commandHandlerMapper[command]?.handle(session,
+                jsonMessage[rawCommand]) ?:
+                throw IllegalArgumentException("No handler was found for the " +
+                        "command:\n$command")
     }
 
     /**
