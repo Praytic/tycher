@@ -24,7 +24,7 @@ class TychHandler : MessageHandler<TychRequest>() {
         val tych = Tych(user, message)
         if (user.clickable.invoke(tychs[user])) {
             consumeTychs(tych)
-            tychs.putTemp(user, tych, tych.lifeDuration())
+            tychs.putTemp(user, tych)
             send(tych)
         }
     }
@@ -39,7 +39,6 @@ class TychHandler : MessageHandler<TychRequest>() {
         val gainedScore = consumedTychs.map { it to it.calculateScore() }.toMap()
         userScoreChange[tych.tycher] = gainedScore.entries.sumBy { it.value }
         consumedTychs.forEach {
-            it.tycher.tychIsReady = true
             userScoreChange[it.tycher] = -it.calculateScore()
             tychs.remove(it.tycher)
         }

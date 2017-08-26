@@ -1,6 +1,7 @@
 import com.github.salomonbrys.kotson.plus
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.schedule
 
@@ -15,11 +16,12 @@ inline fun <reified T : Message> Gson.toJsonMessage(src: T): String {
 }
 
 /**
- * Puts value into [MutableMap] and removes it after [storageTime].
+ * Puts a [Tych] into [MutableMap] and removes it after [Tych.lifeDuration].
  */
-fun <K> MutableMap<K, Tych>.putTemp(key: K, value: Tych): Tych? {
-    val result = put(key, value)
-
-    Timer(true).schedule(value.lifeDuration()) { remove(key) }
-    return result
+fun <K> MutableMap<K, Tych>.putTemp(key: K, value: Tych) {
+    put(key, value)
+    val lifeDuration = value.lifeDuration()
+    Timer(true).schedule(lifeDuration) { remove(key) }
+    log.info { "Put ($key, $value) will be removed after ${lifeDuration/1000}" +
+            " seconds." }
 }

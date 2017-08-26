@@ -6,10 +6,13 @@ import handler.LoginHandler
 import handler.MessageHandler
 import handler.ScoreboardHandler
 import handler.TychHandler
+import mu.KotlinLogging
 import org.eclipse.jetty.websocket.api.Session
 import spark.Spark.*
 import websocket.MainWebSocket
 import java.util.concurrent.ConcurrentHashMap
+
+val log = KotlinLogging.logger {}
 
 /**
  * Serialization library.

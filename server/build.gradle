@@ -41,6 +41,7 @@ dependencies {
     compile "com.sparkjava:spark-core:$spark_version"
     compile "org.slf4j:slf4j-simple:$slf4j_version"
     compile "com.google.guava:guava:$guava_version"
+    compile "io.github.microutils:kotlin-logging:1.4.6"
     compile project(":model")
 }
 

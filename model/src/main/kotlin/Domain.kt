@@ -13,8 +13,7 @@ abstract class Message(
 data class User(
         val name: String? = null,
         var score: Int = 100,
-        var reloadSpeed: Double = 1.0,
-        var tychIsReady: Boolean = true) {
+        var reloadSpeed: Double = 1.0) {
 
     /**
      * User can click if he has no non-dummy [Tych]s active.
@@ -56,7 +55,7 @@ data class Tych(
     constructor(tycher: User, tychRequest: TychRequest) :
             this(tycher, tychRequest.position, tychRequest.spawnTime)
 
-    val lifeDuration = { (radius() / shrinkSpeed()).toLong() }
+    val lifeDuration = { (radius() / shrinkSpeed() / SCORE_TO_SHRINK_SPEED).toLong() }
     val lifetime = { Date().getTime() - spawnTime }
     val currentRadius = { radius() - shrinkSpeed() * lifetime() }
     val isConsumedBy = { tych: Tych -> currentRadius() < tych.currentRadius() }
