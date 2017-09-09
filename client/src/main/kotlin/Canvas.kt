@@ -48,6 +48,7 @@ class Canvas(width: Int, height: Int) {
     gameSocket.send(JSON.stringify(tych))
   }
 
+
   init {
     console.logWithTime("Initializing canvas...")
     canvas = document.createElement("canvas") as HTMLCanvasElement
