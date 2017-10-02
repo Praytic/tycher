@@ -9,6 +9,8 @@ import handler.ScoreboardHandler
 import handler.TychHandler
 import mu.KotlinLogging
 import org.eclipse.jetty.websocket.api.Session
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import spark.Spark.*
 import websocket.MainWebSocket
 import java.util.concurrent.ConcurrentHashMap
