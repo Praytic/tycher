@@ -13,12 +13,12 @@ fun main(args: Array<String>) {
   initWebSockets()
   console.logWithTime("Starting game loop...")
 
-  window.requestAnimationFrame {
+  window.setInterval({
     canvas.renderBackground()
     canvas.renderTychs()
     canvas.renderScoreboard()
     canvas.shrinkTychs()
-  }
+  }, RENDERING_RATIO)
 
   window.setInterval({
     if (gameSocket.readyState.toInt() == 1) {

@@ -47,6 +47,9 @@ dependencies {
     compile "com.google.guava:guava:$guava_version"
     compile "io.github.microutils:kotlin-logging:1.4.6"
     compile project(":model")
+    testCompile 'junit:junit:4.12'
+    testCompile "org.mockito:mockito-core:1.9.5"
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
 }
 
 compileKotlin {

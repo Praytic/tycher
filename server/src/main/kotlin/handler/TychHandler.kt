@@ -25,7 +25,7 @@ class TychHandler : MessageHandler<TychRequest>() {
   override fun handle(user: User, session: Session, message: TychRequest) {
     val tych = Tych(user, message)
     log.info { "Handling $tych." }
-    if (user.clickable.invoke(tychs[user])) {
+    if (user.clickable(tychs[user])) {
       consumeTychs(tych)
       tychs.putTemp(user, tych)
       send(tych)
@@ -37,14 +37,14 @@ class TychHandler : MessageHandler<TychRequest>() {
    * Returns consumed [Tych]s. They will no longer be presented in [tychs].
    */
   fun consumeTychs(tych: Tych): List<Tych> {
-    val userScoreChange = mutableMapOf<User, Int>()
-    val consumedTychs = tych.consumedTychs(tychs.values)
+    val consumedTychs = tych.getAllConsumedTychs(tychs.values)
     val gainedScore = consumedTychs.map { it to it.calculateScore() }.toMap()
-    userScoreChange[tych.tycher] = gainedScore.entries.sumBy { it.value }
+    tych.tycher.score += gainedScore.entries.sumBy { it.value }
     consumedTychs.forEach {
-      userScoreChange[it.tycher] = -it.calculateScore()
+      val tycherScore = it.calculateScore()
+      it.tycher.score -= tycherScore
       tychs.remove(it.tycher)
-      log.info { "$tych consumed $it." }
+      log.info { "$tych consumed $it and gains $tycherScore points." }
     }
     return consumedTychs
   }
