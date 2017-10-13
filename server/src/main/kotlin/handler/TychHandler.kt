@@ -25,7 +25,7 @@ class TychHandler : MessageHandler<TychRequest>() {
   override fun handle(user: User, session: Session, message: TychRequest) {
     val tych = Tych(user, message)
     log.info { "Handling $tych." }
-    if (user.clickable(tychs[user])) {
+    if (user.isClickable(tychs[user])) {
       consumeTychs(tych)
       tychs.putTemp(user, tych)
       send(tych)

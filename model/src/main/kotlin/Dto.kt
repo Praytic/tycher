@@ -21,7 +21,7 @@ data class TychResponse(
     val shrinkSpeed: Double) : Message(Command.TYCH) {
   constructor(tych: Tych) : this(tych.position,
                                  tych.getRadius(),
-                                 tych.getShrinkSpeedScore())
+                                 tych.getScoreReductionPerMillis())
 }
 
 /**

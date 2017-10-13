@@ -41,7 +41,7 @@ class Tych(
    * Returns current radius of the [Tych].
    */
   override fun getCurrentRadius(now: Date) =
-      Math.max(getRadius() - getShrinkSpeedScore() * getLifetimeMillis(now), 0.0)
+      Math.max(getRadius() - getScoreReductionPerMillis() * getLifetimeMillis(now), 0.0)
 
   /**
    * Returns true if current [Tych] was consumed by other [Tych].
@@ -56,12 +56,12 @@ class Tych(
   /**
    * Returns score reduction rate for the [Tych] per millisecond.
    */
-  fun getShrinkSpeedScore() = tycher.score * SCORE_TO_SHRINK_SPEED
+  fun getScoreReductionPerMillis() = tycher.score * SCORE_TO_SHRINK_SPEED
 
   /**
    * Returns radius reduction rate for the [Tych] per millisecond.
    */
-  fun getShrinkSpeedRadius() = getShrinkSpeedScore() * SCORE_TO_RADIUS
+  fun getShrinkSpeedRadius() = getScoreReductionPerMillis() * SCORE_TO_RADIUS
 
   /**
    * Returns initial [Tych] radius.
