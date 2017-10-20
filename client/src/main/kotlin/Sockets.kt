@@ -30,6 +30,10 @@ fun initWebSockets() {
     if (sb != null) {
       handleScoreboard(sb)
     }
+    val dtych = message.asDynamic().deleteTych
+    if (dtych != null) {
+      handleDeleteTych(dtych)
+    }
     event
   }
 }

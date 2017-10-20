@@ -20,3 +20,11 @@ fun handleScoreboard(sb: dynamic) {
     scoreboard.put(pair[0], pair[1])
   }
 }
+
+fun handleDeleteTych(dtych: dynamic) {
+  console.logWithTime("Message game socket with data: (${dtych})")
+  val pos = Position(dtych[0], dtych[1])
+  val radius = dtych[2]
+  val shrinkSpeed = dtych[3]
+  tychs.remove(Tych(pos, radius, shrinkSpeed))
+}

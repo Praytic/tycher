@@ -2,19 +2,6 @@ import Tych.Companion.SCORE_TO_RADIUS
 import java.util.*
 
 /**
- * [User] entity defines a single user.
- */
-class User(
-    val name: String? = null,
-    var score: Int = 100) {
-
-  /**
-   * User can click if he has no non-dummy [Tych]s active.
-   */
-  fun isClickable(tych: Tych?) = tych == null || tych.isDummy
-}
-
-/**
  * [Tych] entity defines the object appearing after user's click action.
  */
 class Tych(
@@ -42,16 +29,6 @@ class Tych(
    */
   override fun getCurrentRadius(now: Date) =
       Math.max(getRadius() - getScoreReductionPerMillis() * getLifetimeMillis(now), 0.0)
-
-  /**
-   * Returns true if current [Tych] was consumed by other [Tych].
-   */
-  fun isConsumedBy(tych: Tych, now: Date = Date()): Boolean {
-    return position.x + getCurrentRadius(now) < tych.position.x + tych.getCurrentRadius(now) &&
-        position.y + getCurrentRadius(now) < tych.position.y + tych.getCurrentRadius(now) &&
-        position.x - getCurrentRadius(now) > tych.position.x - tych.getCurrentRadius(now) &&
-        position.y - getCurrentRadius(now) > tych.position.y - tych.getCurrentRadius(now)
-  }
 
   /**
    * Returns score reduction rate for the [Tych] per millisecond.
@@ -97,10 +74,19 @@ abstract class Circle(
    * Returns true if current [Tych] was consumed by other [Tych].
    */
   fun isConsumedBy(circle: Circle, now: Date = Date()): Boolean {
-    return position.x + getCurrentRadius(now) < circle.position.x + circle.getCurrentRadius(now) &&
-        position.y + getCurrentRadius(now) < circle.position.y + circle.getCurrentRadius(now) &&
-        position.x - getCurrentRadius(now) > circle.position.x - circle.getCurrentRadius(now) &&
-        position.y - getCurrentRadius(now) > circle.position.y - circle.getCurrentRadius(now)
+    val x1 = circle.position.x
+    val x2 = this.position.x
+    val y1 = circle.position.y
+    val y2 = this.position.y
+    val r1 = circle.getCurrentRadius(now)
+    val r2 = this.getCurrentRadius(now)
+
+    val distance = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1))
+
+    if (distance > (r1 + r2))
+      return false
+    else
+      return distance <= Math.abs(r1 - r2)
   }
 
   /**

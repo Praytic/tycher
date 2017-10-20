@@ -39,6 +39,19 @@ data class Scoreboard(
 }
 
 /**
+ * [User] entity defines a single user.
+ */
+data class User(
+    val name: String? = null,
+    var score: Int = 100) {
+
+  /**
+   * User can click if he has no non-dummy [Tych]s active.
+   */
+  fun isClickable(tych: Tych?) = tych == null || tych.isDummy
+}
+
+/**
  * [Login] entity which is transferred from frontend to backend.
  */
 data class Login(val username: String) : Message(Command.LOGIN)

@@ -24,11 +24,12 @@ class TychHandler : MessageHandler<TychRequest>() {
 
   override fun handle(user: User, session: Session, message: TychRequest) {
     val tych = Tych(user, message)
-    log.info { "Handling $tych." }
+    log.info { "Handling $message." }
     if (user.isClickable(tychs[user])) {
-      consumeTychs(tych)
+      val consumedTychs = consumeTychs(tych)
       tychs.putTemp(user, tych)
       send(tych)
+      consumedTychs.forEach { remove(it) }
     }
   }
 
@@ -62,6 +63,23 @@ class TychHandler : MessageHandler<TychRequest>() {
           try {
             log.info { "Sending $tych to $user." }
             session.remote.sendString(gson.toJsonMessage(tychResponse))
+          } catch (ex: WebSocketException) {
+            session.close()
+          }
+        })
+  }
+  
+  fun remove(tych: Tych) {
+    val tychResponse = TychResponse(tych)
+    val receivers = users
+        .filter { it.value != null }
+        .filter { it.key.isOpen }
+    receivers.forEach(
+        { session, user ->
+          try {
+            log.info { "Removing $tych for $user." }
+            session.remote.sendString(gson.toJsonMessage(tychResponse,
+                                                         Command.REMOVE_TYCH))
           } catch (ex: WebSocketException) {
             session.close()
           }

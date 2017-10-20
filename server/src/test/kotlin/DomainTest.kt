@@ -63,11 +63,11 @@ class TychTest {
     val tych2 = Tych(tycher = User(score = defaultScore), spawnTime = now.time)
 
     assertTrue(tych2.getCurrentRadius(now) == tych1.getCurrentRadius(now),
-               "Initial radius of tych1 should be greater than tych2's " +
-                   "radius because tych1 has greater score and they both were created at " +
+               "Initial radius of $tych1 should be greater than $tych2's " +
+                   "radius because $tych1 has greater score and they both were created at " +
                    "the same time.")
     assertTrue(!tych2.isConsumedBy(tych1, Date()),
-               "Tych2 should be consumed by tych1 because tych1 has " +
+               "$tych2 should be consumed by $tych1 because $tych1 has " +
                    "greater current radius and they both were created at the same " +
                    "position.")
 
@@ -84,9 +84,47 @@ class TychTest {
 
     val actualCurrentRadius1 = tych1.getCurrentRadius(future)
 
-    assertEquals(tych1.tycher.score - tych1.getScoreReductionPerMillis(),
+    assertEquals(tych1.tycher.score - tych1.getScoreReductionPerMillis() * defaultTimePast,
                  actualCurrentRadius1,
-                 "Initial radius should be reduced by ${tych1.getScoreReductionPerMillis()} " +
-                     "because $defaultTimePast ms have past.")
+                 "Initial radius should be reduced after time.")
   }
+
+  /**
+   * [Tych.isConsumedBy]
+   */
+  @Test
+  fun test5() {
+    val now = Date()
+    val tych1 = Tych(position = Position(1.0, 1.0),
+                     tycher = User(score = defaultScore),
+                     spawnTime = now.time)
+    val tych2 = Tych(position = Position(0.0, 0.0),
+                     tycher = User(score = defaultScore - 1),
+                     spawnTime = now.time)
+
+    assertTrue(!tych2.isConsumedBy(tych1, Date()),
+               "Although $tych1 has greater radius than $tych2, it" +
+                   "cannot consume $tych2 because its position is different, so" +
+                   "$tych1's circle doesn't fully contain $tych2's circle.")
+  }
+
+  /**
+   * [Tych.isConsumedBy]
+   */
+  @Test
+  fun test6() {
+    val now = Date()
+    val tych1 = Tych(position = Position(1.0, 1.0),
+                     tycher = User(score = defaultScore),
+                     spawnTime = now.time)
+    val tych2 = Tych(position = Position(0.0, 0.0),
+                     tycher = User(score = defaultScore - 2),
+                     spawnTime = now.time)
+
+    assertTrue(tych2.isConsumedBy(tych1, Date()),
+               "Although $tych1 and $tych2 have different position," +
+                   "$tych1's circle is big enough to fully contain $tych2's circle.")
+  }
+
+  // TODO: Check two tychs consumed.
 }
