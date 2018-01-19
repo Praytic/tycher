@@ -12,7 +12,7 @@ class Tych(
 
   companion object {
     val SCORE_TO_RADIUS = 1.0
-    val SCORE_TO_SHRINK_SPEED = 0.01
+    val SCORE_TO_SHRINK_SPEED = 0.0001
   }
 
   constructor(tycher: User, tychRequest: TychRequest) :
@@ -51,6 +51,10 @@ class Tych(
   fun getAllConsumedTychs(tychs: Iterable<Tych>) = tychs.filter {
     it.isConsumedBy(this)
   }
+
+  override fun toString(): String {
+    return "Tych(tycher=$tycher, isDummy=$isDummy, circle=${super.toString()})"
+  }
 }
 
 /**
@@ -86,13 +90,17 @@ abstract class Circle(
     if (distance > (r1 + r2))
       return false
     else
-      return distance <= Math.abs(r1 - r2)
+      return distance < Math.abs(r1 - r2)
   }
 
   /**
    * Returns a current score of the [Circle] depending on [currentRadius].
    */
   fun calculateScore(now: Date = Date()) = (getCurrentRadius(now) / SCORE_TO_RADIUS).toInt()
+
+  override fun toString(): String {
+    return "Circle(position=$position, spawnTime=$spawnTime)"
+  }
 }
 
 /**
@@ -106,6 +114,6 @@ class Food(
   override fun getCurrentRadius(now: Date) = initialRadius
 }
 
-class Position(
+data class Position(
     val x: Double = 0.0,
     val y: Double = 0.0)

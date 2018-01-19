@@ -27,6 +27,7 @@ class TychHandlerTest {
                      tycher = User(score = defaultScore - 1),
                      spawnTime = now.time)
 
+    tychs.put(tych1.tycher, tych1)
     tychs.put(tych2.tycher, tych2)
     val actualResult = tychHandler.consumeTychs(tych1)
     assertTrue(actualResult.isNotEmpty(),

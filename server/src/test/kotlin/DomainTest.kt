@@ -70,7 +70,6 @@ class TychTest {
                "$tych2 should be consumed by $tych1 because $tych1 has " +
                    "greater current radius and they both were created at the same " +
                    "position.")
-
   }
 
   /**

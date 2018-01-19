@@ -38,6 +38,7 @@ class TychHandler : MessageHandler<TychRequest>() {
    * Returns consumed [Tych]s. They will no longer be presented in [tychs].
    */
   fun consumeTychs(tych: Tych): List<Tych> {
+    log.info { tychs.values }
     val consumedTychs = tych.getAllConsumedTychs(tychs.values)
     val gainedScore = consumedTychs.map { it to it.calculateScore() }.toMap()
     tych.tycher.score += gainedScore.entries.sumBy { it.value }
