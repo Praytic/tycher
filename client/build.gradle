@@ -36,6 +36,8 @@ task assembleWeb(type: Sync) {
     }
     from compileKotlin2Js.destinationDir
     into "${projectDir}/build/resources/main"
+    from "src/main/resources"
+    into "build/rsources/main"
 
     dependsOn classes
 }
@@ -43,6 +45,7 @@ task assembleWeb(type: Sync) {
 assemble.dependsOn assembleWeb
 
 compileKotlin2Js {
-    kotlinOptions.outputFile = "${projectDir}/build/resources/main/output.js"
+    kotlinOptions.sourceMapEmbedSources = "always"
+    kotlinOptions.outputFile = "${projectDir}/build/resources/main/index.js"
     kotlinOptions.sourceMap = true
 }
