@@ -4,7 +4,7 @@ import com.github.salomonbrys.kotson.typeAdapter
 import java.lang.UnsupportedOperationException
 import java.util.*
 import Scoreboard
-import tychs
+import User
 import users
 
 val scoreboardRequestAdapter = typeAdapter<Scoreboard> {
