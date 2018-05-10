@@ -6,7 +6,7 @@ import kotlin.js.json
 /**
  * The main [WebSocket] for handling user actions.
  */
-val gameSocket = WebSocket("ws://localhost:4567/game")
+val gameSocket = WebSocket("ws://${window.location.hostname}:4567/game")
 
 fun initWebSockets() {
   console.logWithTime("Init web sockets...")

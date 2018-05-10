@@ -8,6 +8,6 @@
   },
   "scripts": {
     "prestart": "npm install",
-    "start": "http-server -a localhost -p 8000 -c-1 build/resources/main"
+    "start": "http-server -a 192.168.0.38 -p 8000 -c-1 build/resources/main"
   }
 }
