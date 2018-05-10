@@ -35,3 +35,17 @@ fun <K> MutableMap<K, Tych>.putTemp(key: K, value: Tych, now: Date = Date()) {
   log.info { "$value will be removed after ${lifeDuration / 1000.0} seconds. " +
       "Timestamp in seconds: $nowSeconds." }
 }
+
+fun Tych.getDefaults(): Map<String, Any> {
+  val tychValues = mutableMapOf<String, Any>()
+  tychValues["ScoreReductionPerMillis"] = this.getScoreReductionPerMillis()
+  tychValues["Radius"] = this.getRadius()
+  tychValues["ShrinkSpeedRadius"] = this.getShrinkSpeedRadius()
+  tychValues["LifeDurationMillis"] = this.getLifeDurationMillis()
+  tychValues["CurrentRadius"] = this.getCurrentRadius()
+  tychValues["LifetimeMillis"] = this.getLifetimeMillis()
+  tychValues["tycher"] = this.tycher
+  tychValues["position"] = this.position
+  tychValues["spawnTime"] = this.spawnTime
+  return tychValues
+}

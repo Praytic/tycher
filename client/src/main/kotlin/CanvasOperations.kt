@@ -1,3 +1,5 @@
+import org.w3c.dom.TimeRanges
+import kotlin.browser.window
 import kotlin.js.Math
 
 /**
@@ -19,7 +21,7 @@ fun Canvas.renderBackground() {
  * Renders all [Tych]s on the [Canvas].
  */
 fun Canvas.renderTychs() {
-  tychs.forEach {
+  tychs.values.forEach {
     cxt.save()
     cxt.beginPath()
     cxt.arc(it.position.x,
@@ -40,8 +42,8 @@ fun Canvas.renderTychs() {
  */
 fun Canvas.shrinkTychs() {
   val deadTychs = mutableSetOf<Tych>()
-  tychs.forEach {
-    it.currentRadius -= it.shrinkSpeed
+  tychs.values.forEach {
+    it.currentRadius -= it.shrinkSpeedPerSecond / (1000.0 / RENDERING_RATIO)
     if (it.currentRadius <= 0) {
       deadTychs.add(it)
     }
@@ -49,7 +51,7 @@ fun Canvas.shrinkTychs() {
 
   if (deadTychs.isNotEmpty()) {
     console.logWithTime("Removing dead tychs...")
-    tychs.removeAll(deadTychs)
+    deadTychs.forEach { tychs.remove(it.position) }
   }
 }
 

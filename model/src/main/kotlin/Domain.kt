@@ -12,7 +12,7 @@ class Tych(
 
   companion object {
     val SCORE_TO_RADIUS = 1.0
-    val SCORE_TO_SHRINK_SPEED = 0.0001
+    val SCORE_TO_SHRINK_SPEED = 0.1
   }
 
   constructor(tycher: User, tychRequest: TychRequest) :
@@ -22,13 +22,13 @@ class Tych(
    * Returns how much milliseconds left for this [Tych] to be removed.
    */
   fun getLifeDurationMillis(now: Date = Date()) =
-      (getCurrentRadius(now) / getShrinkSpeedRadius()).toLong()
+      (getCurrentRadius(now) / getShrinkSpeedRadius() * 1000.0).toLong()
 
   /**
    * Returns current radius of the [Tych].
    */
   override fun getCurrentRadius(now: Date) =
-      Math.max(getRadius() - getScoreReductionPerMillis() * getLifetimeMillis(now), 0.0)
+      Math.max(getRadius() - getScoreReductionPerMillis() * getLifetimeMillis(now) / 1000.0, 0.0)
 
   /**
    * Returns score reduction rate for the [Tych] per millisecond.
