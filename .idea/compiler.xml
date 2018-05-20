@@ -10,6 +10,7 @@
       <module name="core_test" target="1.8" />
       <module name="dto_main" target="1.8" />
       <module name="dto_test" target="1.8" />
+      <module name="model_dto" target="1.8" />
       <module name="model_main" target="1.8" />
       <module name="model_test" target="1.8" />
       <module name="server_main" target="1.8" />

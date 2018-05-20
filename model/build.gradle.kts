@@ -3,7 +3,7 @@ plugins {
 }
 
 the<JavaPluginConvention>().sourceSets {
-    "main" {
+    "dto" {
         java {
             srcDirs("../dto/src/main/kotlin")
         }
