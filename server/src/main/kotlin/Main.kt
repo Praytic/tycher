@@ -1,3 +1,4 @@
+@file:JvmName("Main")
 import Command.*
 import adapter.scoreboardRequestAdapter
 import adapter.tychRequestAdapter

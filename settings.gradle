@@ -1,5 +1,0 @@
-rootProject.name = 'parent'
-include ':model'
-include ':server'
-include ':client'
-

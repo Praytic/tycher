@@ -78,7 +78,7 @@ class TychTest {
   @Test
   fun test4() {
     val now = Date()
-    val future = Date(now.time + defaultTimePast)
+    val future = Date(now.time + defaultTimePast * 1000)
     val tych1 = Tych(tycher = User(score = defaultScore), spawnTime = now.time)
 
     val actualCurrentRadius1 = tych1.getCurrentRadius(future)
