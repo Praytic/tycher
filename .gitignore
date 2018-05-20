@@ -116,3 +116,4 @@ hs_err_pid*
 target
 
 ### Custom
+server/src/main/resources/public
