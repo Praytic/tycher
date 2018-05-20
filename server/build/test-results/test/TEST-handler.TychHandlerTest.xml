@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="handler.TychHandlerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2018-05-20T06:08:35" hostname="gds000896-nb.carina.griddynamics.net" time="0.149">
-  <properties/>
-  <testcase name="test1" classname="handler.TychHandlerTest" time="0.149"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[[Test worker] INFO Main - [Tych(tycher=User(name=null, score=99), isDummy=false, circle=Circle(position=Position(x=0.0, y=0.0), spawnTime=1526796515708)), Tych(tycher=User(name=null, score=100), isDummy=false, circle=Circle(position=Position(x=0.0, y=0.0), spawnTime=1526796515708))]
-[Test worker] INFO Main - Tych(tycher=User(name=null, score=197), isDummy=false, circle=Circle(position=Position(x=0.0, y=0.0), spawnTime=1526796515708)) consumed Tych(tycher=User(name=null, score=2), isDummy=false, circle=Circle(position=Position(x=0.0, y=0.0), spawnTime=1526796515708)) and gains 97 points.
-]]></system-err>
-</testsuite>

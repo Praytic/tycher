@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="handler.LoginHandlerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2018-05-20T06:08:35" hostname="gds000896-nb.carina.griddynamics.net" time="0.0">
-  <properties/>
-  <testcase name="test" classname="handler.LoginHandlerTest" time="0.0"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
