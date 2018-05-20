@@ -1,14 +1,12 @@
-multi-kotlin-project
+Tycher
 ====================
 
-A multi-project build with two Kotlin based projects:
+A game...
 
- 1. [core](model) implements the main algorithm to compute the answer to the ultimate question of Life, the Universe and Everything
- 2. [cli](server) implements the command line interface
-
-Common behavior for all projects, such as the configuration of _group_, _version_ and _repositories_, is defined in the [root project build script](./build.gradle.kts).
-
-Plugin application and dependency configuration is segregated to each separate subproject.
+ 1. [client](client) implements the frontend side of the game
+ 2. [server](server) implements the backend side of the game
+ 3. [model](model) contains all models and DTOs used by server
+ 4. [dto](dto) contains DTO classes used both in `model` and `client` modules
 
 Run with:
 
