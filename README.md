@@ -12,6 +12,10 @@ Run with:
 
     ./gradlew run
 
+Run with debug (connect remotely to 9099 port):
+
+    ./gradlew -DEBUG run
+
 Check all project dependencies with:
 
     ./gradlew dependencies

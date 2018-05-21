@@ -23,3 +23,12 @@ dependencies {
     testCompile(kotlin("test"))
     testCompile(kotlin("test-junit"))
 }
+
+tasks.withType(JavaExec::class.java) {
+    if (System.getProperty("DEBUG") != null) {
+        println("Debug mode is on.")
+        jvmArgs = listOf("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=9099")
+    } else {
+        println("Debug mode is off.")
+    }
+}
