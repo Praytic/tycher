@@ -1,3 +1,5 @@
+import com.google.common.base.CaseFormat
+
 /**
  * [Command] entity is required to map [MessageHandler] to the json message
  * which is received from frontend.
@@ -14,5 +16,5 @@ enum class Command {
     SCOREBOARD,
     FOOD;
 
-    override fun toString(): String = super.toString().toLowercaseCamel()
+    override fun toString(): String = CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, super.toString())
 }

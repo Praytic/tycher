@@ -1,3 +1,5 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 plugins {
     application
     kotlin("jvm")
@@ -30,5 +32,42 @@ tasks.withType(JavaExec::class.java) {
         jvmArgs = listOf("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=9099")
     } else {
         println("Debug mode is off.")
+    }
+}
+
+val fatJar = task("fatJar", type = Jar::class) {
+    baseName = "${project.name}-fat"
+    manifest {
+        attributes["Implementation-Title"] = "Gradle Jar ${project.name}"
+        attributes["Implementation-Version"] = version
+        attributes["Main-Class"] = "Main"
+    }
+    from(configurations.runtime.map({ if (it.isDirectory) it else zipTree(it) }))
+    with(tasks["jar"] as CopySpec)
+}
+
+val dataContent = copySpec {
+    from("src/data")
+    include("*.data")
+}
+
+val initConfig = task("initConfig", type = Copy::class) {
+    includeEmptyDirs = true
+    from("$projectDir/../client/build/web")
+    into("$projectDir/src/main/resources/public")
+    with(dataContent)
+}
+
+val removeStaticFiles = task("removeStaticFiles", type = Delete::class) {
+    delete("$projectDir/src/main/resources/public")
+}
+
+tasks {
+    "build" {
+        dependsOn(fatJar)
+        dependsOn(initConfig)
+    }
+    "clean" {
+        dependsOn(removeStaticFiles)
     }
 }

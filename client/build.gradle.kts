@@ -19,7 +19,7 @@ tasks {
         kotlinOptions {
             outputFile = "${mainSourceSet.output.resourcesDir}/output.js"
             metaInfo = true
-            sourceMap = true
+            sourceMap = false
         }
     }
     val unpackKotlinJsStdlib by creating {
