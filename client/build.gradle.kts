@@ -12,14 +12,6 @@ repositories {
     jcenter()
 }
 
-the<JavaPluginConvention>().sourceSets {
-    "main" {
-        java {
-            srcDirs("dto/src/main/kotlin")
-        }
-    }
-}
-
 val mainSourceSet = the<JavaPluginConvention>().sourceSets["main"]!!
 
 tasks {

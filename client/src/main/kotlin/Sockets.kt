@@ -36,4 +36,8 @@ fun initWebSockets() {
     }
     event
   }
+
+  gameSocket.onclose = { event ->
+    console.logWithTime("Close game socket connection.")
+  }
 }

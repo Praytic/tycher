@@ -1,4 +1,3 @@
-
 /**
  * Defines entities which should be transported as a json message via websocket.
  */
