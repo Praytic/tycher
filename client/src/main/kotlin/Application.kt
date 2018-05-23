@@ -10,9 +10,13 @@ val RENDERING_RATIO = 10.0
 val UPDATE_RATIO = 1000.0
 val SCOREBOARD_LIMIT = 10.0
 
+var webSocketPort: Long = 4567;
+
 fun main(args: Array<String>) {
-  initWebSockets()
   console.logWithTime("Starting game loop...")
+  if (args.isNotEmpty()) {
+    webSocketPort = args[0].toLong()
+  }
 
   window.setInterval({
     canvas.renderBackground()

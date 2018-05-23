@@ -3,13 +3,14 @@ import kotlin.browser.window
 import kotlin.js.Json
 import kotlin.js.json
 
+val gameSocket: WebSocket by lazyOf(initWebSocket())
+
 /**
  * The main [WebSocket] for handling user actions.
  */
-val gameSocket = WebSocket("ws://${window.location.hostname}:4567/game")
-
-fun initWebSockets() {
+fun initWebSocket(): WebSocket {
   console.logWithTime("Init web sockets...")
+  val gameSocket = WebSocket("ws://${window.location.hostname}:$webSocketPort/game")
 
   gameSocket.onopen = { event ->
     console.logWithTime("Open game socket connection.")
@@ -40,4 +41,5 @@ fun initWebSockets() {
   gameSocket.onclose = { event ->
     console.logWithTime("Close game socket connection.")
   }
+  return gameSocket
 }

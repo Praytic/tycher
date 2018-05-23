@@ -50,6 +50,9 @@ val commandHandlerMapper = mapOf(
 
 fun main(args: Array<String>) {
   staticFiles.location("/public")
+  if (System.getenv("PORT") != null) {
+    port(System.getenv("PORT").toInt())
+  }
   println(Tych().getDefaults())
   webSocket("/game", MainWebSocket::class.java)
   init()

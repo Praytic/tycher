@@ -117,4 +117,4 @@ target
 
 ### Custom
 server/src/main/resources/public
-!server/build/libs/server-fat-1.0.jar
+#!server/build/libs/server-fat-1.0.jar

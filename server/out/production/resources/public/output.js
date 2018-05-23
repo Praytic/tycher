@@ -11,7 +11,6 @@ var output = function (_, Kotlin) {
   var Pair = Kotlin.kotlin.Pair;
   var ensureNotNull = Kotlin.ensureNotNull;
   var Kind_CLASS = Kotlin.Kind.CLASS;
-  var println = Kotlin.kotlin.io.println_s8jyv4$;
   var tychs;
   var scoreboard;
   var canvas;
@@ -263,9 +262,6 @@ var output = function (_, Kotlin) {
   function logWithTime($receiver, o) {
     console.log((new Date()).getTime().toString() + ' > ' + o);
   }
-  function main_0(args) {
-    println('Hello, world!');
-  }
   Object.defineProperty(_, 'tychs', {
     get: function () {
       return tychs;
@@ -320,8 +316,6 @@ var output = function (_, Kotlin) {
   });
   _.initWebSockets = initWebSockets;
   _.logWithTime_taunjn$ = logWithTime;
-  var package$samples = _.samples || (_.samples = {});
-  package$samples.main_kand9s$ = main_0;
   var LinkedHashMap_init = Kotlin.kotlin.collections.LinkedHashMap_init_q3lmfv$;
   tychs = LinkedHashMap_init();
   scoreboard = LinkedHashMap_init();
