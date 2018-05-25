@@ -1,8 +1,12 @@
+import jp.classmethod.aws.gradle.elasticbeanstalk.EbEnvironmentExtension
 import org.apache.tools.ant.filters.ReplaceTokens
+import java.util.*
 
 plugins {
     application
+    war
     kotlin("jvm")
+    id("jp.classmethod.aws.beanstalk")
 }
 
 application {
@@ -70,4 +74,16 @@ tasks {
     "clean" {
         dependsOn(removeStaticFiles)
     }
+}
+
+beanstalk {
+    appName = "tycher"
+    appDesc = "tycher app"
+
+    environment(delegateClosureOf<EbEnvironmentExtension> {
+        envName = "Tycher-env"
+        envDesc = "Tycher-env"
+        templateName = "development"
+        versionLabel = "tycher-${Date()}"
+    })
 }
