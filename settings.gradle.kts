@@ -1,5 +1,5 @@
 rootProject.name = "tycher"
-include("client", "model", "server")
+include("client", "model", "server", "loadtests")
 
 pluginManagement {
     resolutionStrategy {

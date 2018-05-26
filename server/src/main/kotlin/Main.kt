@@ -13,6 +13,7 @@ import org.eclipse.jetty.websocket.api.Session
 import spark.Spark.*
 import websocket.MainWebSocket
 import java.util.concurrent.ConcurrentHashMap
+import spark.Spark.staticFiles
 
 val log = KotlinLogging.logger {}
 
@@ -49,7 +50,10 @@ val commandHandlerMapper = mapOf(
 )
 
 fun main(args: Array<String>) {
-  staticFiles.location("/public")
+  val projectDir = System.getProperty("user.dir")
+  val staticDir = "/client/build/web"
+  staticFiles.externalLocation(projectDir + staticDir)
+
   if (System.getenv("PORT") != null) {
     port(System.getenv("PORT").toInt())
   }

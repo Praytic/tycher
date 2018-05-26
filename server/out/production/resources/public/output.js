@@ -3,6 +3,7 @@ if (typeof kotlin === 'undefined') {
 }
 var output = function (_, Kotlin) {
   'use strict';
+  var toLong = Kotlin.kotlin.text.toLong_pdl1vz$;
   var Unit = Kotlin.kotlin.Unit;
   var numberToInt = Kotlin.numberToInt;
   var to = Kotlin.kotlin.to_ujzrz7$;
@@ -11,12 +12,14 @@ var output = function (_, Kotlin) {
   var Pair = Kotlin.kotlin.Pair;
   var ensureNotNull = Kotlin.ensureNotNull;
   var Kind_CLASS = Kotlin.Kind.CLASS;
+  var lazyOf = Kotlin.kotlin.lazyOf_mh5how$;
   var tychs;
   var scoreboard;
   var canvas;
   var RENDERING_RATIO;
   var UPDATE_RATIO;
   var SCOREBOARD_LIMIT;
+  var webSocketPort;
   function main$lambda() {
     renderBackground(canvas);
     renderTychs(canvas);
@@ -25,20 +28,22 @@ var output = function (_, Kotlin) {
     return Unit;
   }
   function main$lambda_0() {
-    if (gameSocket.readyState === 1) {
+    if (get_gameSocket().readyState === 1) {
       updateScoreboard();
     }
     return Unit;
   }
   function main(args) {
-    initWebSockets();
     logWithTime(console, ['Starting game loop...']);
+    if (!(args.length === 0)) {
+      webSocketPort = toLong(args[0]);
+    }
     window.setInterval(main$lambda, numberToInt(RENDERING_RATIO));
     window.setInterval(main$lambda_0, numberToInt(UPDATE_RATIO));
   }
   function updateScoreboard() {
     var scoreboard = json([to('scoreboard', SCOREBOARD_LIMIT)]);
-    gameSocket.send(JSON.stringify(scoreboard));
+    get_gameSocket().send(JSON.stringify(scoreboard));
   }
   function handleTych(tych) {
     logWithTime(console, ['Handle tych: (' + tych + ')']);
@@ -94,7 +99,7 @@ var output = function (_, Kotlin) {
     logWithTime(console, ['Canvas click registered at (' + pos.x + ', ' + pos.y + ').']);
     var params = [pos.x, pos.y];
     var tych = json([new Pair('tych', params)]);
-    gameSocket.send(JSON.stringify(tych));
+    get_gameSocket().send(JSON.stringify(tych));
     return Unit;
   }
   Canvas.$metadata$ = {
@@ -225,15 +230,20 @@ var output = function (_, Kotlin) {
     return this === other || (other !== null && (typeof other === 'object' && (Object.getPrototypeOf(this) === Object.getPrototypeOf(other) && (Kotlin.equals(this.position, other.position) && Kotlin.equals(this.currentRadius, other.currentRadius) && Kotlin.equals(this.shrinkSpeedPerSecond, other.shrinkSpeedPerSecond)))));
   };
   var gameSocket;
-  function initWebSockets$lambda(event) {
-    logWithTime(console, ['Open game socket connection.']);
-    var username = window.prompt('Choose username:');
-    var login = json([to('username', username)]);
-    var greetings = json([to('login', login)]);
-    gameSocket.send(JSON.stringify(greetings));
-    return event;
+  function get_gameSocket() {
+    return gameSocket.value;
   }
-  function initWebSockets$lambda_0(event) {
+  function initWebSocket$lambda(closure$gameSocket) {
+    return function (event) {
+      logWithTime(console, ['Open game socket connection.']);
+      var username = window.prompt('Choose username:');
+      var login = json([to('username', username)]);
+      var greetings = json([to('login', login)]);
+      closure$gameSocket.send(JSON.stringify(greetings));
+      return event;
+    };
+  }
+  function initWebSocket$lambda_0(event) {
     var message = JSON.parse(event.data);
     var tych = message.tych;
     if (tych != null) {
@@ -249,15 +259,17 @@ var output = function (_, Kotlin) {
     }
     return event;
   }
-  function initWebSockets$lambda_1(event) {
+  function initWebSocket$lambda_1(event) {
     logWithTime(console, ['Close game socket connection.']);
     return Unit;
   }
-  function initWebSockets() {
+  function initWebSocket() {
     logWithTime(console, ['Init web sockets...']);
-    gameSocket.onopen = initWebSockets$lambda;
-    gameSocket.onmessage = initWebSockets$lambda_0;
-    gameSocket.onclose = initWebSockets$lambda_1;
+    var gameSocket = new WebSocket('ws://' + window.location.hostname + ':' + webSocketPort + '/game');
+    gameSocket.onopen = initWebSocket$lambda(gameSocket);
+    gameSocket.onmessage = initWebSocket$lambda_0;
+    gameSocket.onclose = initWebSocket$lambda_1;
+    return gameSocket;
   }
   function logWithTime($receiver, o) {
     console.log((new Date()).getTime().toString() + ' > ' + o);
@@ -292,6 +304,14 @@ var output = function (_, Kotlin) {
       return SCOREBOARD_LIMIT;
     }
   });
+  Object.defineProperty(_, 'webSocketPort', {
+    get: function () {
+      return webSocketPort;
+    },
+    set: function (value) {
+      webSocketPort = value;
+    }
+  });
   _.main_kand9s$ = main;
   _.updateScoreboard = updateScoreboard;
   _.handleTych_za3rmp$ = handleTych;
@@ -310,11 +330,9 @@ var output = function (_, Kotlin) {
   _.Position = Position;
   _.Tych = Tych;
   Object.defineProperty(_, 'gameSocket', {
-    get: function () {
-      return gameSocket;
-    }
+    get: get_gameSocket
   });
-  _.initWebSockets = initWebSockets;
+  _.initWebSocket = initWebSocket;
   _.logWithTime_taunjn$ = logWithTime;
   var LinkedHashMap_init = Kotlin.kotlin.collections.LinkedHashMap_init_q3lmfv$;
   tychs = LinkedHashMap_init();
@@ -323,8 +341,9 @@ var output = function (_, Kotlin) {
   RENDERING_RATIO = 10.0;
   UPDATE_RATIO = 1000.0;
   SCOREBOARD_LIMIT = 10.0;
+  webSocketPort = Kotlin.Long.fromInt(4567);
   cxt = canvas.cxt;
-  gameSocket = new WebSocket('ws://' + window.location.hostname + ':4567/game');
+  gameSocket = lazyOf(initWebSocket());
   main([]);
   Kotlin.defineModule('output', _);
   return _;

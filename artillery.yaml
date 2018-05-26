@@ -1,0 +1,15 @@
+config:
+    target: "ws://localhost:4567/game"
+    phases:
+      - duration: 20
+        arrivalRate: 10
+    ws:
+      # Ignore SSL certificate errors
+      # - useful in *development* with self-signed certs
+      rejectUnauthorized: false
+scenarios:
+  - engine: "ws"
+    flow:
+      - send: "{login: {username: \"{{ $randomString() }}\"}}"
+      - think: 10
+      - send: "{tych: [320, 387, 100, 10]}"
