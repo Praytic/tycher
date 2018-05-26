@@ -13,6 +13,7 @@ enum class Command {
     DUMMY_TYCH,
     REMOVE_TYCH,
     LOGIN,
+    LOGOUT,
     SCOREBOARD,
     FOOD;
 

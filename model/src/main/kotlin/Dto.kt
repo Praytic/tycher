@@ -54,3 +54,8 @@ data class User(
  * [Login] entity which is transferred from frontend to backend.
  */
 data class Login(val username: String) : Message(Command.LOGIN)
+
+/**
+ * [Logout] entity which is transferred from frontend to backend.
+ */
+data class Logout(val username: String) : Message(Command.LOGOUT)

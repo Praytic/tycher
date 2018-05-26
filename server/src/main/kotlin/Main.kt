@@ -4,10 +4,7 @@ import adapter.scoreboardRequestAdapter
 import adapter.tychRequestAdapter
 import adapter.tychResponseAdapter
 import com.google.gson.GsonBuilder
-import handler.LoginHandler
-import handler.MessageHandler
-import handler.ScoreboardHandler
-import handler.TychHandler
+import handler.*
 import mu.KotlinLogging
 import org.eclipse.jetty.websocket.api.Session
 import spark.Spark.*
@@ -46,7 +43,8 @@ val commandHandlerMapper = mapOf(
     TYCH to TychHandler(),
     DUMMY_TYCH to TychHandler(),
     SCOREBOARD to ScoreboardHandler(),
-    LOGIN to LoginHandler()
+    LOGIN to LoginHandler(),
+    LOGOUT to LogoutHandler()
 )
 
 fun main(args: Array<String>) {
