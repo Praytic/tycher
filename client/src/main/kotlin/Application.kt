@@ -8,7 +8,7 @@ val canvas = Canvas(window.innerWidth, window.innerHeight)
 // It is inversely proportional to the Tych.SCORE_TO_SHRINK_SPEED constant.
 val RENDERING_RATIO = 10.0
 val UPDATE_RATIO = 1000.0
-val SCOREBOARD_LIMIT = 10.0
+val SCOREBOARD_LIMIT = 100
 
 var webSocketPort: Long = 4567;
 

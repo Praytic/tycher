@@ -15,7 +15,8 @@ class LogoutHandler : MessageHandler<Logout>() {
       gson.fromJson(message, Logout::class.java)
 
   override fun handle(user: User, session: Session, message: Logout) {
-    session.close(CloseStatus(4000, "Closed by request."))
-    log.info { "User ${message.username} logged out." }
+    session.close(CloseStatus(4000,
+            "Closed by request. ${message.cause}"))
+    log.info { "User ${user.name} logged out." }
   }
 }
