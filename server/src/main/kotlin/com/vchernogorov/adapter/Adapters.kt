@@ -1,16 +1,16 @@
 /**
  * This kotlin file contains all adapters for serializing/deserializing game objects.
  */
-package adapter
+package com.vchernogorov.adapter
 
 import com.github.salomonbrys.kotson.typeAdapter
 import java.lang.UnsupportedOperationException
 import java.util.*
-import Scoreboard
-import TychRequest
-import Position
-import TychResponse
-import users
+import com.vchernogorov.Scoreboard
+import com.vchernogorov.TychRequest
+import com.vchernogorov.Position
+import com.vchernogorov.TychResponse
+import com.vchernogorov.users
 
 val scoreboardRequestAdapter = typeAdapter<Scoreboard> {
   write {
@@ -26,7 +26,7 @@ val scoreboardRequestAdapter = typeAdapter<Scoreboard> {
   }
   read {
     val limit = nextInt()
-    Scoreboard(limit)
+      Scoreboard(limit)
   }
 }
 
@@ -39,7 +39,7 @@ val tychRequestAdapter = typeAdapter<TychRequest> {
     val xpos = nextDouble()
     val ypos = nextDouble()
     endArray()
-    TychRequest(Position(xpos, ypos), Date().time)
+      TychRequest(Position(xpos, ypos), Date().time)
   }
 }
 

@@ -1,9 +1,9 @@
-package handler
+package com.vchernogorov.websocket
 
 import org.junit.Test
 import kotlin.test.assertTrue
 
-class LoginHandlerTest {
+class MainWebSocketTest {
 
   @Test
   fun test() {

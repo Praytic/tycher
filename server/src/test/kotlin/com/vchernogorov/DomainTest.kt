@@ -1,3 +1,5 @@
+package com.vchernogorov
+
 import org.junit.Test
 import java.util.*
 import kotlin.test.assertEquals
@@ -44,7 +46,7 @@ class TychTest {
     val actualCurrentRadius2 = tych2.getCurrentRadius(future)
 
     assertTrue(actualCurrentRadius2 < actualCurrentRadius1,
-               "Although current radius of both tychs have changed, they " +
+               "Although current radius of both com.vchernogorov.getTychs have changed, they " +
                    "were created at the same time and it doesn't matter what was " +
                    "the initial score, $tych1 always should be greater than $tych2.")
     assertTrue(tych2.isConsumedBy(tych1, Date()),
@@ -95,11 +97,11 @@ class TychTest {
   fun test5() {
     val now = Date()
     val tych1 = Tych(position = Position(1.0, 1.0),
-                     tycher = User(score = defaultScore),
-                     spawnTime = now.time)
+            tycher = User(score = defaultScore),
+            spawnTime = now.time)
     val tych2 = Tych(position = Position(0.0, 0.0),
-                     tycher = User(score = defaultScore - 1),
-                     spawnTime = now.time)
+            tycher = User(score = defaultScore - 1),
+            spawnTime = now.time)
 
     assertTrue(!tych2.isConsumedBy(tych1, Date()),
                "Although $tych1 has greater radius than $tych2, it" +
@@ -114,16 +116,16 @@ class TychTest {
   fun test6() {
     val now = Date()
     val tych1 = Tych(position = Position(1.0, 1.0),
-                     tycher = User(score = defaultScore),
-                     spawnTime = now.time)
+            tycher = User(score = defaultScore),
+            spawnTime = now.time)
     val tych2 = Tych(position = Position(0.0, 0.0),
-                     tycher = User(score = defaultScore - 2),
-                     spawnTime = now.time)
+            tycher = User(score = defaultScore - 2),
+            spawnTime = now.time)
 
     assertTrue(tych2.isConsumedBy(tych1, Date()),
                "Although $tych1 and $tych2 have different position," +
                    "$tych1's circle is big enough to fully contain $tych2's circle.")
   }
 
-  // TODO: Check two tychs consumed.
+  // TODO: Check two com.vchernogorov.getTychs consumed.
 }

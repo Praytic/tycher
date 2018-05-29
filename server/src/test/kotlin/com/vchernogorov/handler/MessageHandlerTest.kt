@@ -1,9 +1,9 @@
-package websocket
+package com.vchernogorov.handler
 
 import org.junit.Test
 import kotlin.test.assertTrue
 
-class MainWebSocketTest {
+class MessageHandlerTest {
 
   @Test
   fun test() {

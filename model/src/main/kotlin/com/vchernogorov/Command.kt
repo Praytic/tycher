@@ -1,3 +1,5 @@
+package com.vchernogorov
+
 import com.google.common.base.CaseFormat
 
 /**

@@ -1,9 +1,9 @@
-package handler
+package com.vchernogorov.adapter
 
 import org.junit.Test
 import kotlin.test.assertTrue
 
-class ScoreboardHandlerTest {
+class ScoreboardAdaptersTest {
 
   @Test
   fun test() {

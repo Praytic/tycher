@@ -1,14 +1,16 @@
-import Tych.Companion.SCORE_TO_RADIUS
+package com.vchernogorov
+
+import com.vchernogorov.Tych.Companion.SCORE_TO_RADIUS
 import java.util.*
 
 /**
  * [Tych] entity defines the object appearing after user's click action.
  */
 class Tych(
-    position: Position = Position(),
-    spawnTime: Long = Date().time,
-    val tycher: User = User(),
-    val isDummy: Boolean = false) : Circle(position, spawnTime) {
+        position: Position = Position(),
+        spawnTime: Long = Date().time,
+        val tycher: User = User(),
+        val isDummy: Boolean = false) : Circle(position, spawnTime) {
 
   companion object {
     val SCORE_TO_RADIUS = 1.0
@@ -53,7 +55,7 @@ class Tych(
   }
 
   override fun toString(): String {
-    return "Tych(tycher=$tycher, isDummy=$isDummy, circle=${super.toString()})"
+    return "com.vchernogorov.Tych(tycher=$tycher, isDummy=$isDummy, circle=${super.toString()})"
   }
 }
 
@@ -61,8 +63,8 @@ class Tych(
  * Abstract entity for all circle-like entities.
  */
 abstract class Circle(
-    val position: Position = Position(),
-    val spawnTime: Long = Date().time) {
+        val position: Position = Position(),
+        val spawnTime: Long = Date().time) {
 
   /**
    * Returns how much milliseconds ago this [Tych] was created.
@@ -99,7 +101,7 @@ abstract class Circle(
   fun calculateScore(now: Date = Date()) = (getCurrentRadius(now) / SCORE_TO_RADIUS).toInt()
 
   override fun toString(): String {
-    return "Circle(position=$position, spawnTime=$spawnTime)"
+    return "com.vchernogorov.Circle(position=$position, spawnTime=$spawnTime)"
   }
 }
 

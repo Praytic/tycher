@@ -1,13 +1,12 @@
-package handler
+package com.vchernogorov.handler
 
-import Logout
-import User
+import com.vchernogorov.Logout
 import com.google.gson.JsonElement
-import gson
-import log
+import com.vchernogorov.User
+import com.vchernogorov.gson
+import com.vchernogorov.log
 import org.eclipse.jetty.websocket.api.CloseStatus
 import org.eclipse.jetty.websocket.api.Session
-import users
 
 class LogoutHandler : MessageHandler<Logout>() {
 

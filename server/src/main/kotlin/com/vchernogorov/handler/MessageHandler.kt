@@ -1,10 +1,10 @@
-package handler
+package com.vchernogorov.handler
 
 import com.google.gson.JsonElement
 import org.eclipse.jetty.websocket.api.Session
-import users
-import Message
-import User
+import com.vchernogorov.users
+import com.vchernogorov.Message
+import com.vchernogorov.User
 
 /**
  * Template for all handlers. Contains [handle] method for handling

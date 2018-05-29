@@ -1,12 +1,8 @@
-package handler
+package com.vchernogorov.handler
 
-import Login
-import User
 import com.google.gson.JsonElement
-import gson
-import log
+import com.vchernogorov.*
 import org.eclipse.jetty.websocket.api.Session
-import users
 
 class LoginHandler : MessageHandler<Login>() {
 

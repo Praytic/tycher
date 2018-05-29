@@ -1,7 +1,8 @@
+package com.vchernogorov
+
 import com.github.salomonbrys.kotson.plus
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import Command
 import java.util.*
 import java.util.concurrent.TimeUnit
 

@@ -1,20 +1,20 @@
-package websocket
+package com.vchernogorov.websocket
 
-import Command
-import User
+import com.vchernogorov.Command
+import com.vchernogorov.User
 import com.github.salomonbrys.kotson.keys
 import com.google.gson.JsonObject
-import commandHandlerMapper
-import gson
-import handler.TychHandler
-import log
+import com.vchernogorov.commandHandlerMapper
+import com.vchernogorov.gson
+import com.vchernogorov.handler.TychHandler
+import com.vchernogorov.log
 import org.eclipse.jetty.websocket.api.Session
 import org.eclipse.jetty.websocket.api.annotations.*
-import tychs
-import users
+import com.vchernogorov.tychs
+import com.vchernogorov.users
 
 /**
- * [MainWebSocket] manages websocket connection and messages which are passed
+ * [MainWebSocket] manages com.vchernogorov.websocket connection and messages which are passed
  * through it.
  */
 @WebSocket
@@ -30,7 +30,7 @@ class MainWebSocket {
   }
 
   /**
-   * Handles messages sent via websocket. Delegates [message] handling
+   * Handles messages sent via com.vchernogorov.websocket. Delegates [message] handling
    * to the appropriate [MessageHandler].
    */
   @OnWebSocketMessage

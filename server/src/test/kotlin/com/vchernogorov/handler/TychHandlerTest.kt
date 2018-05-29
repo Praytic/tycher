@@ -1,10 +1,10 @@
-package handler
+package com.vchernogorov.handler
 
-import User
-import Position
-import Tych
+import com.vchernogorov.Position
+import com.vchernogorov.Tych
+import com.vchernogorov.User
 import org.junit.Test
-import tychs
+import com.vchernogorov.tychs
 import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -21,11 +21,11 @@ class TychHandlerTest {
   fun test1() {
     val now = Date()
     val tych1 = Tych(position = Position(0.0, 0.0),
-                     tycher = User(score = defaultScore),
-                     spawnTime = now.time)
+            tycher = User(score = defaultScore),
+            spawnTime = now.time)
     val tych2 = Tych(position = Position(0.0, 0.0),
-                     tycher = User(score = defaultScore - 1),
-                     spawnTime = now.time)
+            tycher = User(score = defaultScore - 1),
+            spawnTime = now.time)
 
     tychs.put(tych1.tycher, tych1)
     tychs.put(tych2.tycher, tych2)

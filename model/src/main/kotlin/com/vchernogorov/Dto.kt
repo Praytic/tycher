@@ -1,5 +1,7 @@
+package com.vchernogorov
+
 /**
- * Defines entities which should be transported as a json message via websocket.
+ * Defines entities which should be transported as a json message via com.vchernogorov.websocket.
  */
 abstract class Message(
     val command: Command)
@@ -8,16 +10,16 @@ abstract class Message(
  * [Tych] entity which is transferred from frontend to backend.
  */
 data class TychRequest(
-    val position: Position,
-    val spawnTime: Long) : Message(Command.TYCH)
+        val position: Position,
+        val spawnTime: Long) : Message(Command.TYCH)
 
 /**
  * [Tych] entity which is transferred from backend to frontend.
  */
 data class TychResponse(
-    val position: Position,
-    val radius: Double,
-    val shrinkSpeed: Double) : Message(Command.TYCH) {
+        val position: Position,
+        val radius: Double,
+        val shrinkSpeed: Double) : Message(Command.TYCH) {
   constructor(tych: Tych) : this(tych.position,
                                  tych.getRadius(),
                                  tych.getScoreReductionPerMillis())

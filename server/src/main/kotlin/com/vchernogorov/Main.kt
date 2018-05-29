@@ -1,14 +1,19 @@
 @file:JvmName("Main")
-import Command.*
-import adapter.scoreboardRequestAdapter
-import adapter.tychRequestAdapter
-import adapter.tychResponseAdapter
+
+package com.vchernogorov
+import com.vchernogorov.Command.*
+import com.vchernogorov.adapter.scoreboardRequestAdapter
+import com.vchernogorov.adapter.tychRequestAdapter
+import com.vchernogorov.adapter.tychResponseAdapter
 import com.google.gson.GsonBuilder
-import handler.*
+import com.vchernogorov.handler.LoginHandler
+import com.vchernogorov.handler.LogoutHandler
+import com.vchernogorov.handler.ScoreboardHandler
+import com.vchernogorov.handler.TychHandler
 import mu.KotlinLogging
 import org.eclipse.jetty.websocket.api.Session
 import spark.Spark.*
-import websocket.MainWebSocket
+import com.vchernogorov.websocket.MainWebSocket
 import java.util.concurrent.ConcurrentHashMap
 import spark.Spark.staticFiles
 

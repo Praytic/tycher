@@ -1,9 +1,9 @@
+package com.vchernogorov
+
 import org.junit.Test
-import org.mockito.Mockito.mock
 import org.mockito.Spy
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.test.assertTrue
 
 class UtilityTest {
 

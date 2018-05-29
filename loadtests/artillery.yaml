@@ -1,7 +1,7 @@
 config:
   target: "ws://localhost:4567/game"
   phases:
-    - duration: 10
+    - duration: 20
       arrivalRate: 50
   variables:
     x: [50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750,
@@ -15,6 +15,14 @@ scenarios:
   - engine: "ws"
     flow:
       - send: "{login: {username: \"{{ $randomString() }}\"}}"
+      - send: "{tych: [{{ x }},{{ y }}]}"
+      - think: 10
+      - send: "{tych: [{{ x }},{{ y }}]}"
+      - think: 10
+      - send: "{tych: [{{ x }},{{ y }}]}"
+      - think: 10
+      - send: "{tych: [{{ x }},{{ y }}]}"
+      - think: 10
       - send: "{tych: [{{ x }},{{ y }}]}"
       - think: 10
       - send: "{logout: {cause: \"Artillery logout.\"}}"

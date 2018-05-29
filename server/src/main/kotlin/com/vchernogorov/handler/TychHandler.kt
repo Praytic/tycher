@@ -1,19 +1,10 @@
-package handler
+package com.vchernogorov.handler
 
-import Tych
-import TychRequest
-import TychResponse
-import User
 import com.google.gson.JsonElement
-import Command
-import gson
-import log
+import com.vchernogorov.*
 import org.eclipse.jetty.websocket.api.Session
 import org.eclipse.jetty.websocket.api.WebSocketException
-import putTemp
-import toJsonMessage
-import tychs
-import users
+import java.util.*
 
 /**
  * Extension of [MessageHandler] for [TychRequest] entity.

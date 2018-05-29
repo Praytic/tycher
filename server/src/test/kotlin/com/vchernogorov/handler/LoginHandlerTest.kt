@@ -1,9 +1,9 @@
-package adapter
+package com.vchernogorov.handler
 
 import org.junit.Test
 import kotlin.test.assertTrue
 
-class TychAdaptersTest {
+class LoginHandlerTest {
 
   @Test
   fun test() {
