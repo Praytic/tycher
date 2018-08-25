@@ -1,6 +1,5 @@
 package com.vchernogorov.handler
 
-import com.vchernogorov.Logout
 import com.google.gson.JsonElement
 import com.vchernogorov.User
 import com.vchernogorov.gson
@@ -8,14 +7,14 @@ import com.vchernogorov.log
 import org.eclipse.jetty.websocket.api.CloseStatus
 import org.eclipse.jetty.websocket.api.Session
 
-class LogoutHandler : MessageHandler<Logout>() {
+class LogoutHandler : MessageHandler<User>() {
 
   override fun parse(message: JsonElement) =
-      gson.fromJson(message, Logout::class.java)
+      gson.fromJson(message, User::class.java)
 
-  override fun handle(user: User, session: Session, message: Logout) {
+  override fun handle(user: User, session: Session, message: User) {
     session.close(CloseStatus(4000,
-            "Closed by request. ${message.cause}"))
+            "Closed by request from ${message}."))
     log.info { "User ${user.name} logged out." }
   }
 }

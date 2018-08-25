@@ -11,7 +11,7 @@ enum class Command {
     /**
      * As request: Indicates [Tych] creation from [User].
      */
-    TYCH,
+    TYCHS,
     DUMMY_TYCH,
     REMOVE_TYCH,
     LOGIN,

@@ -15,7 +15,7 @@ class TychHandlerTest {
   val defaultScore = 100
 
   /**
-   * [TychHandler.consumeTychs]
+   * [TychHandler.consumeTychsBy]
    */
   @Test
   fun test1() {
@@ -29,7 +29,7 @@ class TychHandlerTest {
 
     tychs.put(tych1.tycher, tych1)
     tychs.put(tych2.tycher, tych2)
-    val actualResult = tychHandler.consumeTychs(tych1)
+    val actualResult = tychHandler.consumeTychsBy(tych1)
     assertTrue(actualResult.isNotEmpty(),
                "$tych1 should consume another tych.")
     assertEquals(tych2, actualResult[0],

@@ -1,17 +1,10 @@
 package com.vchernogorov.websocket
 
-import com.vchernogorov.Command
-import com.vchernogorov.User
 import com.github.salomonbrys.kotson.keys
 import com.google.gson.JsonObject
-import com.vchernogorov.commandHandlerMapper
-import com.vchernogorov.gson
-import com.vchernogorov.handler.TychHandler
-import com.vchernogorov.log
+import com.vchernogorov.*
 import org.eclipse.jetty.websocket.api.Session
 import org.eclipse.jetty.websocket.api.annotations.*
-import com.vchernogorov.tychs
-import com.vchernogorov.users
 
 /**
  * [MainWebSocket] manages com.vchernogorov.websocket connection and messages which are passed
@@ -26,7 +19,7 @@ class MainWebSocket {
   @OnWebSocketConnect
   fun onConnect(session: Session) {
     val connectedUser = users.put(session, User())
-    log.info { "Connection was established for $connectedUser." }
+    log.info { "Connection was established for ${session.upgradeRequest.getHeader("User-Agent")}." }
   }
 
   /**
@@ -51,9 +44,6 @@ class MainWebSocket {
   fun onClose(session: Session, statusCode: Int, reason: String) {
     val removedUser = users.remove(session)
     val removedTych = tychs.remove(removedUser)
-    if (removedTych != null) {
-      (commandHandlerMapper[Command.TYCH] as TychHandler).remove(removedTych)
-    }
     log.info { "Connection was closed for $removedUser with status " +
             "code $statusCode. Reason: $reason" }
   }

@@ -24,17 +24,17 @@ class Canvas(width: Int, height: Int) {
   /**
    * Width of the [HTMLCanvasElement].
    */
-  val width: Int
+  val width: Double
     get() {
-      return canvas.width
+      return canvas.width.toDouble()
     }
 
   /**
    * Height of the [HTMLCanvasElement].
    */
-  val height: Int
+  val height: Double
     get() {
-      return canvas.height
+      return canvas.height.toDouble()
     }
 
   /**
@@ -44,7 +44,7 @@ class Canvas(width: Int, height: Int) {
     val pos = event.asDynamic()
     console.logWithTime("Canvas click registered at (${pos.x}, ${pos.y}).")
     val params = arrayOf(pos.x, pos.y)
-    val tych = json(Pair("tych", params))
+    val tych = json(Pair("tychs", params))
     gameSocket.send(JSON.stringify(tych))
   }
 

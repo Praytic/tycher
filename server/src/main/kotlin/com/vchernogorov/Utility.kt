@@ -3,6 +3,8 @@ package com.vchernogorov
 import com.github.salomonbrys.kotson.plus
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.google.gson.reflect.TypeToken
+import org.eclipse.jetty.websocket.api.Session
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -11,10 +13,16 @@ import java.util.concurrent.TimeUnit
  * the [Command] name and then converts it to json.
  */
 inline fun <reified T : Message> Gson.toJsonMessage(src: T, command: Command = src.command): String {
-  val commandPair = Pair(command.toString(),
-                         gson.toJsonTree(src, T::class.java))
+  val commandPair = Pair(command.toString(), toJsonTree(src, T::class.java))
   val jsonCommand = JsonObject().plus(commandPair)
-  return gson.toJson(jsonCommand)
+  return toJson(jsonCommand)
+}
+
+inline fun <reified T : Message> Gson.toJsonMessage(src: List<T>, command: Command): String {
+  val srcType = object : TypeToken<List<T>>(){}.type
+  val commandPair = Pair(command.toString(), toJsonTree(src, srcType))
+  val jsonCommand = JsonObject().plus(commandPair)
+  return toJson(jsonCommand)
 }
 
 /**
@@ -38,16 +46,24 @@ fun <K> MutableMap<K, Tych>.putTemp(key: K, value: Tych, now: Date = Date()) {
       "Timestamp in seconds: $nowSeconds." }
 }
 
-fun Tych.getDefaults(): Map<String, Any> {
-  val tychValues = mutableMapOf<String, Any>()
-  tychValues["ScoreReductionPerMillis"] = this.getScoreReductionPerMillis()
-  tychValues["Radius"] = this.getRadius()
-  tychValues["ShrinkSpeedRadius"] = this.getShrinkSpeedRadius()
-  tychValues["LifeDurationMillis"] = this.getLifeDurationMillis()
-  tychValues["CurrentRadius"] = this.getCurrentRadius()
-  tychValues["LifetimeMillis"] = this.getLifetimeMillis()
-  tychValues["tycher"] = this.tycher
-  tychValues["position"] = this.position
-  tychValues["spawnTime"] = this.spawnTime
-  return tychValues
-}
+/**
+ * Returns default values for each field in a [Tych].
+ * Should be manually updated after adding/removing/renaming a field.
+ */
+fun Tych.getDefaults() = mutableMapOf(
+      "ScoreReductionPerMillis" to getScoreReductionPerMillis(),
+      "Radius" to getRadius(),
+      "ShrinkSpeedRadius" to getShrinkSpeedRadius(),
+      "LifeDurationMillis" to getLifeDurationMillis(),
+      "CurrentRadius" to getCurrentRadius(),
+      "LifetimeMillis" to getLifeDurationMillis(),
+      "tycher" to tycher,
+      "position" to position,
+      "spawnTime" to spawnTime
+)
+
+fun getActiveUsers(): Map<Session, User> = users
+    .filter { it.key.isOpen }
+    .filter { it.value != null }
+    .map { it.key to it.value!! }
+    .toMap()

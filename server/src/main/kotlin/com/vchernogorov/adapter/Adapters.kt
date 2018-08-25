@@ -4,19 +4,27 @@
 package com.vchernogorov.adapter
 
 import com.github.salomonbrys.kotson.typeAdapter
-import java.lang.UnsupportedOperationException
+import com.vchernogorov.*
 import java.util.*
-import com.vchernogorov.Scoreboard
-import com.vchernogorov.TychRequest
-import com.vchernogorov.Position
-import com.vchernogorov.TychResponse
-import com.vchernogorov.users
+
+val userAdapter = typeAdapter<User> {
+  write {
+    beginArray()
+    value(it.name)
+    value(it.score)
+    endArray()
+  }
+  read {
+    beginArray()
+    val name = nextString()
+    User(name)
+  }
+}
 
 val scoreboardRequestAdapter = typeAdapter<Scoreboard> {
   write {
     beginArray()
-    val availableUsers = users.values.filterNotNull()
-    it.scores(availableUsers).forEach {
+    it.scores(getActiveUsers().values).forEach {
       beginArray()
       value(it.first)
       value(it.second)
@@ -25,34 +33,26 @@ val scoreboardRequestAdapter = typeAdapter<Scoreboard> {
     endArray()
   }
   read {
+    beginArray()
     val limit = nextInt()
       Scoreboard(limit)
   }
 }
 
-val tychRequestAdapter = typeAdapter<TychRequest> {
+val tychAdapter = typeAdapter<Tych> {
   write {
-    throw UnsupportedOperationException("This should not be used.")
+    beginArray()
+    value(it.position.x)
+    value(it.position.y)
+    value(it.getCurrentRadius())
+    value(it.getScoreReductionPerMillis())
+    endArray()
   }
   read {
     beginArray()
     val xpos = nextDouble()
     val ypos = nextDouble()
     endArray()
-      TychRequest(Position(xpos, ypos), Date().time)
-  }
-}
-
-val tychResponseAdapter = typeAdapter<TychResponse> {
-  write {
-    beginArray()
-    value(it.position.x)
-    value(it.position.y)
-    value(it.radius)
-    value(it.shrinkSpeed)
-    endArray()
-  }
-  read {
-    throw UnsupportedOperationException("This should not be used.")
+    Tych(Position(xpos, ypos), Date().time)
   }
 }

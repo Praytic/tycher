@@ -7,18 +7,16 @@ import java.util.*
  * [Tych] entity defines the object appearing after user's click action.
  */
 class Tych(
-        position: Position = Position(),
-        spawnTime: Long = Date().time,
-        val tycher: User = User(),
-        val isDummy: Boolean = false) : Circle(position, spawnTime) {
+    position: Position = Position(),
+    spawnTime: Long = Date().time,
+    val tycher: User = User(),
+    val isDummy: Boolean = false,
+    val score: Int = tycher.score) : Circle(position, spawnTime) {
 
   companion object {
     val SCORE_TO_RADIUS = 1.0
     val SCORE_TO_SHRINK_SPEED = 0.1
   }
-
-  constructor(tycher: User, tychRequest: TychRequest) :
-      this(tychRequest.position, tychRequest.spawnTime, tycher)
 
   /**
    * Returns how much milliseconds left for this [Tych] to be removed.
@@ -35,7 +33,7 @@ class Tych(
   /**
    * Returns score reduction rate for the [Tych] per millisecond.
    */
-  fun getScoreReductionPerMillis() = tycher.score * SCORE_TO_SHRINK_SPEED
+  fun getScoreReductionPerMillis() = score * SCORE_TO_SHRINK_SPEED
 
   /**
    * Returns radius reduction rate for the [Tych] per millisecond.
@@ -45,7 +43,7 @@ class Tych(
   /**
    * Returns initial [Tych] radius.
    */
-  fun getRadius() = tycher.score * SCORE_TO_RADIUS
+  fun getRadius() = score * SCORE_TO_RADIUS
 
   /**
    * Returns a list of [Tych]s which are [isConsumedBy] the current [Tych].
@@ -55,7 +53,7 @@ class Tych(
   }
 
   override fun toString(): String {
-    return "com.vchernogorov.Tych(tycher=$tycher, isDummy=$isDummy, circle=${super.toString()})"
+    return "Tych(tycher=$tycher, isDummy=$isDummy, circle=${super.toString()}, score=$score)"
   }
 }
 
@@ -63,8 +61,8 @@ class Tych(
  * Abstract entity for all circle-like entities.
  */
 abstract class Circle(
-        val position: Position = Position(),
-        val spawnTime: Long = Date().time) {
+    val position: Position = Position(),
+    val spawnTime: Long = Date().time) : Message(Command.TYCHS) {
 
   /**
    * Returns how much milliseconds ago this [Tych] was created.
