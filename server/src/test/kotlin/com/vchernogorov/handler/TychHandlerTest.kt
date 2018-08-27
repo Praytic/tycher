@@ -3,8 +3,8 @@ package com.vchernogorov.handler
 import com.vchernogorov.Position
 import com.vchernogorov.Tych
 import com.vchernogorov.User
-import org.junit.Test
 import com.vchernogorov.tychs
+import org.junit.Test
 import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -29,7 +29,7 @@ class TychHandlerTest {
 
     tychs.put(tych1.tycher, tych1)
     tychs.put(tych2.tycher, tych2)
-    val actualResult = tychHandler.consumeTychsBy(tych1)
+    val actualResult = tychHandler.consumeTychsBy(tych1.tycher, tych1)
     assertTrue(actualResult.isNotEmpty(),
                "$tych1 should consume another tych.")
     assertEquals(tych2, actualResult[0],
