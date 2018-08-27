@@ -16,6 +16,6 @@ object PlayerConf {
 object TychConf {
   const val SCORE_TO_RADIUS_RATE = 1.0
   const val SCORE_TO_SHRINK_SPEED_RATE = 0.1
-  const val STATIC_SHRINK_SPEED = 10.0
+  const val STATIC_SHRINK_SPEED = 20.0
   const val USE_STATIC_SHRINK_SPEED = true
 }

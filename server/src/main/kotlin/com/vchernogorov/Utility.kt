@@ -34,10 +34,17 @@ fun <K> MutableMap<K, Tych>.putTemp(key: K, value: Tych, now: Date = Date()) {
 
   Timer().schedule(object : TimerTask() {
     override fun run() {
-      if (remove(key) != null) {
-        val nowSeconds = TimeUnit.MILLISECONDS.toSeconds(Date().time)
-        log.info { "$value was removed after ${lifeDuration / GameConf.SECOND_TO_MILLIS} seconds. " +
-            "Timestamp in seconds: $nowSeconds." }
+      val currentValue = get(key)
+      if (value == currentValue) {
+        if (remove(key) != null) {
+          val nowSeconds = TimeUnit.MILLISECONDS.toSeconds(Date().time)
+          log.info {
+            "$value was removed after ${lifeDuration / GameConf.SECOND_TO_MILLIS} seconds. " +
+                "Timestamp in seconds: $nowSeconds."
+          }
+        }
+      } else {
+        log.warn { "$value has already been removed from the map." }
       }
     }
   }, lifeDuration)

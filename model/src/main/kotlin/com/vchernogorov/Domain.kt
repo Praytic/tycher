@@ -87,10 +87,7 @@ abstract class Circle(
 
     val distance = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1))
 
-    if (distance > (r1 + r2))
-      return false
-    else
-      return distance < Math.abs(r1 - r2)
+    return distance < r1 - r2
   }
 
   /**
