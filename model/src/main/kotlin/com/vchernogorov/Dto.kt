@@ -1,5 +1,7 @@
 package com.vchernogorov
 
+import com.vchernogorov.PlayerConf.START_SCORE
+
 /**
  * Defines entities which should be transported as a json message via com.vchernogorov.websocket.
  */
@@ -22,7 +24,7 @@ data class Scoreboard(val limit: Int) : Message(Command.SCOREBOARD) {
 /**
  * [User] entity defines a single user.
  */
-data class User(val name: String? = null, var score: Int = 100) : Message(Command.LOGIN) {
+data class User(val name: String? = null, var score: Int = START_SCORE) : Message(Command.LOGIN) {
 
   /**
    * User can click if he has no non-dummy [Tych]s active.

@@ -4,6 +4,12 @@ package com.vchernogorov
 
 import com.google.gson.GsonBuilder
 import com.vchernogorov.Command.*
+import com.vchernogorov.GameConf.LOG_REFRESH_PER_SEC
+import com.vchernogorov.GameConf.SCOREBOARD_REFRESH_PER_SEC
+import com.vchernogorov.GameConf.SECOND_TO_MILLIS
+import com.vchernogorov.GameConf.TIMER_DELAY_MILLIS
+import com.vchernogorov.GameConf.TYCH_REFRESH_PER_SEC
+import com.vchernogorov.PlayerConf.SCOREBOARD_LIMIT
 import com.vchernogorov.adapter.scoreboardRequestAdapter
 import com.vchernogorov.adapter.tychAdapter
 import com.vchernogorov.adapter.userAdapter
@@ -44,7 +50,7 @@ val users: MutableMap<Session, User?> = ConcurrentHashMap()
  */
 val tychs: MutableMap<User, Tych> = ConcurrentHashMap()
 
-val scoreboard = Scoreboard(10)
+val scoreboard = Scoreboard(SCOREBOARD_LIMIT)
 
 /**
  * Map of [Command]s to [MessageHandler]s. Each command should have a
@@ -69,12 +75,15 @@ fun main(args: Array<String>) {
   }
   println(Tych().getDefaults())
   webSocket("/game", MainWebSocket::class.java)
-  startGameLoop(1000, 10);
+  startGameLoop();
   init()
 }
 
-fun startGameLoop(startDelayMillis: Long, periodMillis: Long) {
-  Timer().scheduleAtFixedRate(SendTychsTask(tychs.values), startDelayMillis, periodMillis)
-  Timer().scheduleAtFixedRate(SendScoreboardTask(scoreboard), startDelayMillis, 1000)
-  Timer().scheduleAtFixedRate(LogTask(), startDelayMillis, 5000)
+fun startGameLoop() {
+  Timer().scheduleAtFixedRate(SendTychsTask(tychs.values),
+      TIMER_DELAY_MILLIS, (SECOND_TO_MILLIS/TYCH_REFRESH_PER_SEC).toLong())
+  Timer().scheduleAtFixedRate(SendScoreboardTask(scoreboard),
+      TIMER_DELAY_MILLIS, (SECOND_TO_MILLIS/SCOREBOARD_REFRESH_PER_SEC).toLong())
+  Timer().scheduleAtFixedRate(LogTask(),
+      TIMER_DELAY_MILLIS, (SECOND_TO_MILLIS/LOG_REFRESH_PER_SEC).toLong())
 }

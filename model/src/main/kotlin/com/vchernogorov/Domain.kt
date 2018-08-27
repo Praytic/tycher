@@ -1,6 +1,10 @@
 package com.vchernogorov
 
-import com.vchernogorov.Tych.Companion.SCORE_TO_RADIUS
+import com.vchernogorov.GameConf.SECOND_TO_MILLIS
+import com.vchernogorov.TychConf.SCORE_TO_RADIUS_RATE
+import com.vchernogorov.TychConf.SCORE_TO_SHRINK_SPEED_RATE
+import com.vchernogorov.TychConf.STATIC_SHRINK_SPEED
+import com.vchernogorov.TychConf.USE_STATIC_SHRINK_SPEED
 import java.util.*
 
 /**
@@ -13,37 +17,33 @@ class Tych(
     val isDummy: Boolean = false,
     val score: Int = tycher.score) : Circle(position, spawnTime) {
 
-  companion object {
-    val SCORE_TO_RADIUS = 1.0
-    val SCORE_TO_SHRINK_SPEED = 0.1
-  }
-
   /**
    * Returns how much milliseconds left for this [Tych] to be removed.
    */
   fun getLifeDurationMillis(now: Date = Date()) =
-      (getCurrentRadius(now) / getShrinkSpeedRadius() * 1000.0).toLong()
+      (getCurrentRadius(now) / getShrinkSpeedRadius() * SECOND_TO_MILLIS).toLong()
 
   /**
    * Returns current radius of the [Tych].
    */
   override fun getCurrentRadius(now: Date) =
-      Math.max(getRadius() - getScoreReductionPerMillis() * getLifetimeMillis(now) / 1000.0, 0.0)
+      Math.max(getRadius() - getScoreReductionPerMillis() * getLifetimeMillis(now) / SECOND_TO_MILLIS, 0.0)
 
   /**
    * Returns score reduction rate for the [Tych] per millisecond.
    */
-  fun getScoreReductionPerMillis() = score * SCORE_TO_SHRINK_SPEED
+  fun getScoreReductionPerMillis() = if (USE_STATIC_SHRINK_SPEED) STATIC_SHRINK_SPEED else
+    score * SCORE_TO_SHRINK_SPEED_RATE
 
   /**
    * Returns radius reduction rate for the [Tych] per millisecond.
    */
-  fun getShrinkSpeedRadius() = getScoreReductionPerMillis() * SCORE_TO_RADIUS
+  fun getShrinkSpeedRadius() = getScoreReductionPerMillis() * SCORE_TO_RADIUS_RATE
 
   /**
    * Returns initial [Tych] radius.
    */
-  fun getRadius() = score * SCORE_TO_RADIUS
+  fun getRadius() = score * SCORE_TO_RADIUS_RATE
 
   /**
    * Returns a list of [Tych]s which are [isConsumedBy] the current [Tych].
@@ -96,7 +96,7 @@ abstract class Circle(
   /**
    * Returns a current score of the [Circle] depending on [currentRadius].
    */
-  fun calculateScore(now: Date = Date()) = (getCurrentRadius(now) / SCORE_TO_RADIUS).toInt()
+  fun calculateScore(now: Date = Date()) = (getCurrentRadius(now) / SCORE_TO_RADIUS_RATE).toInt()
 
   override fun toString(): String {
     return "com.vchernogorov.Circle(position=$position, spawnTime=$spawnTime)"

@@ -36,13 +36,13 @@ fun <K> MutableMap<K, Tych>.putTemp(key: K, value: Tych, now: Date = Date()) {
     override fun run() {
       if (remove(key) != null) {
         val nowSeconds = TimeUnit.MILLISECONDS.toSeconds(Date().time)
-        log.info { "$value was removed after ${lifeDuration / 1000.0} seconds. " +
+        log.info { "$value was removed after ${lifeDuration / GameConf.SECOND_TO_MILLIS} seconds. " +
             "Timestamp in seconds: $nowSeconds." }
       }
     }
   }, lifeDuration)
   val nowSeconds = TimeUnit.MILLISECONDS.toSeconds(now.time)
-  log.info { "$value will be removed after ${lifeDuration / 1000.0} seconds. " +
+  log.info { "$value will be removed after ${lifeDuration / GameConf.SECOND_TO_MILLIS} seconds. " +
       "Timestamp in seconds: $nowSeconds." }
 }
 
