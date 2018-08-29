@@ -13,14 +13,15 @@ class SendTychsTask(val tychs: Collection<Tych>) : TimerTask() {
         log.debug { "Sending $tychs to $user." }
         session.remote.sendString(gson.toJsonMessage(tychs.toList(), Command.TYCHS), object : WriteCallback {
           override fun writeFailed(x: Throwable?) {
-            log.error { x }
+            log.error { "Error sending tych: $x" }
           }
 
           override fun writeSuccess() {
           }
         })
       } catch (ex: WebSocketException) {
-        log.error { ex }
+        log.error { "Error during tych sending.\n$ex" }
+        session.close()
       }
     })
   }

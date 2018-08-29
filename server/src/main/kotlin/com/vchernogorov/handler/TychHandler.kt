@@ -3,12 +3,15 @@ package com.vchernogorov.handler
 import com.google.gson.JsonElement
 import com.vchernogorov.*
 import com.vchernogorov.exception.UndefinedEntityException
+import org.eclipse.jetty.util.thread.Scheduler
 import org.eclipse.jetty.websocket.api.Session
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Extension of [MessageHandler] for [TychRequest] entity.
  */
-class TychHandler : MessageHandler<Tych>() {
+class TychHandler(val tychs: MutableMap<User, Tych>,
+                  val tasks: MutableMap<Tych, Scheduler.Task> = ConcurrentHashMap()) : MessageHandler<Tych>() {
 
   override fun parse(message: JsonElement) =
       gson.fromJson(message, Tych::class.java)
@@ -17,8 +20,13 @@ class TychHandler : MessageHandler<Tych>() {
     log.info { "Handling $message." }
     val tych = Tych(message.position, message.spawnTime, user)
     if (user.isClickable(tychs[user])) {
-      consumeTychsBy(user, tych)
-      tychs.putTemp(user, tych)
+      val consumedTychs = consumeTychsBy(user, tych)
+      for (it in consumedTychs) {
+        val timer = tasks.remove(it) ?: continue
+        timer.cancel()
+      }
+      val timer = tychs.putTemp(user, tych)
+      tasks[tych] = timer
     }
   }
 

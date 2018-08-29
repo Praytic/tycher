@@ -24,6 +24,7 @@ dependencies {
   compile("com.github.salomonbrys.kodein:kodein:4.1.0")
   compile("com.github.salomonbrys.kotson:kotson:2.5.0")
   compile("io.github.microutils:kotlin-logging:1.5.4")
+  testCompile("com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0-RC1")
   testCompile("junit:junit:4.12")
   testCompile("org.mockito:mockito-core:1.9.5")
   testCompile(kotlin("test"))

@@ -7,18 +7,19 @@ import java.util.*
 
 class SendScoreboardTask(val scoreboard: Scoreboard) : TimerTask() {
   override fun run() {
-    users.forEach({ session, user ->
+    getActiveUsers().forEach({ session, user ->
       try {
         session.remote.sendString(gson.toJsonMessage(scoreboard), object : WriteCallback {
           override fun writeFailed(x: Throwable?) {
-            log.error { x }
+            log.error { "Error sending scoreboard: $x" }
           }
 
           override fun writeSuccess() {
           }
         })
       } catch (ex: WebSocketException) {
-        log.error { ex }
+        log.error { "Error during scoreboard sending.\n$ex" }
+        session.close()
       }
     })
   }

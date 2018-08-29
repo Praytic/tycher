@@ -4,6 +4,7 @@ import com.github.salomonbrys.kotson.plus
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
+import org.eclipse.jetty.util.thread.Scheduler
 import org.eclipse.jetty.websocket.api.Session
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -28,11 +29,11 @@ inline fun <reified T : Message> Gson.toJsonMessage(src: List<T>, command: Comma
 /**
  * Puts a [Tych] into [MutableMap] and removes it after [Tych.lifeDurationMillis].
  */
-fun <K> MutableMap<K, Tych>.putTemp(key: K, value: Tych, now: Date = Date()) {
+fun <K> MutableMap<K, Tych>.putTemp(key: K, value: Tych, now: Date = Date()): Scheduler.Task {
   put(key, value)
   val lifeDuration = value.getLifeDurationMillis(now)
 
-  Timer().schedule(object : TimerTask() {
+  val task = executor.schedule(object : TimerTask() {
     override fun run() {
       val currentValue = get(key)
       if (value == currentValue) {
@@ -47,10 +48,11 @@ fun <K> MutableMap<K, Tych>.putTemp(key: K, value: Tych, now: Date = Date()) {
         log.warn { "$value has already been removed from the map." }
       }
     }
-  }, lifeDuration)
+  }, lifeDuration, TimeUnit.MILLISECONDS)
   val nowSeconds = TimeUnit.MILLISECONDS.toSeconds(now.time)
   log.info { "$value will be removed after ${lifeDuration / GameConf.SECOND_TO_MILLIS} seconds. " +
       "Timestamp in seconds: $nowSeconds." }
+  return task
 }
 
 /**

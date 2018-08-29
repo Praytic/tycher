@@ -2,9 +2,9 @@ package com.vchernogorov
 
 import com.vchernogorov.GameConf.SECOND_TO_MILLIS
 import com.vchernogorov.PlayerConf.START_SCORE
+import com.vchernogorov.TychConf.SCORE_TO_RADIUS_RATE
 import org.junit.Test
 import java.util.*
-import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -87,9 +87,8 @@ class TychTest {
 
     val actualCurrentRadius1 = tych1.getCurrentRadius(future)
 
-    assertEquals(tych1.tycher.score - tych1.getScoreReductionPerMillis() * defaultTimePast,
-                 actualCurrentRadius1,
-                 "Initial radius should be reduced after time.")
+    assertTrue(actualCurrentRadius1 < tych1.getCurrentRadius(now),
+        "Initial radius should be reduced after time.")
   }
 
   /**
@@ -121,7 +120,7 @@ class TychTest {
             tycher = User(score = START_SCORE),
             spawnTime = now.time)
     val tych2 = Tych(position = Position(0.0, 0.0),
-            tycher = User(score = START_SCORE - 2),
+            tycher = User(score = (START_SCORE - 2 / SCORE_TO_RADIUS_RATE).toInt()),
             spawnTime = now.time)
 
     assertTrue(tych2.isConsumedBy(tych1),
