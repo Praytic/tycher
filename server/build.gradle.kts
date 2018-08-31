@@ -1,6 +1,7 @@
 import jp.classmethod.aws.gradle.elasticbeanstalk.EbEnvironmentExtension
 import org.apache.tools.ant.filters.ReplaceTokens
 import java.util.*
+import org.jetbrains.kotlin.gradle.dsl.Coroutines
 
 plugins {
   application
@@ -23,6 +24,7 @@ dependencies {
   compile("com.google.guava:guava:22.0")
   compile("com.github.salomonbrys.kodein:kodein:4.1.0")
   compile("com.github.salomonbrys.kotson:kotson:2.5.0")
+  compile("org.jetbrains.kotlinx:kotlinx-coroutines-core:0.25.0")
   compile("io.github.microutils:kotlin-logging:1.5.4")
   testCompile("com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0-RC1")
   testCompile("junit:junit:4.12")
@@ -87,4 +89,7 @@ beanstalk {
     templateName = "development"
     versionLabel = "tycher-${Date()}"
   })
+}
+kotlin {
+  experimental.coroutines = Coroutines.ENABLE
 }

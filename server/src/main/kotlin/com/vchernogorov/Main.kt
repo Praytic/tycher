@@ -20,12 +20,12 @@ import com.vchernogorov.task.LogTask
 import com.vchernogorov.task.SendScoreboardTask
 import com.vchernogorov.task.SendTychsTask
 import com.vchernogorov.websocket.MainWebSocket
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
 import mu.KotlinLogging
-import org.eclipse.jetty.util.thread.ScheduledExecutorScheduler
 import org.eclipse.jetty.websocket.api.Session
 import spark.Spark.*
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.TimeUnit
 
 val log = KotlinLogging.logger {}
 
@@ -64,8 +64,6 @@ val commandHandlerMapper = mapOf(
     LOGOUT to LogoutHandler()
 )
 
-val executor = ScheduledExecutorScheduler()
-
 fun main(args: Array<String>) {
   val projectDir = System.getProperty("user.dir")
   val staticDir = "/client/build/web"
@@ -77,14 +75,32 @@ fun main(args: Array<String>) {
   }
   println(Tych().getDefaults())
   webSocket("/game", MainWebSocket::class.java)
-  startGameLoop();
+  launch {
+    startGameLoop();
+  }
   init()
 }
 
-fun startGameLoop() {
-  executor.schedule(SendTychsTask(tychs.values),
-      (SECOND_TO_MILLIS/TYCH_REFRESH_PER_SEC).toLong(), TimeUnit.MILLISECONDS)
-  executor.schedule(SendScoreboardTask(scoreboard),
-      (SECOND_TO_MILLIS/SCOREBOARD_REFRESH_PER_SEC).toLong(), TimeUnit.MILLISECONDS)
-  executor.schedule(LogTask(), (SECOND_TO_MILLIS/LOG_REFRESH_PER_SEC).toLong(), TimeUnit.MILLISECONDS)
+suspend fun startGameLoop() {
+  val sendTychsTask = SendTychsTask(tychs.values)
+  val sendScoreboardTask = SendScoreboardTask(scoreboard)
+  val logTask = LogTask()
+  launch {
+    while (true) {
+      delay((SECOND_TO_MILLIS / TYCH_REFRESH_PER_SEC).toLong(), kotlinx.coroutines.experimental.timeunit.TimeUnit.MILLISECONDS)
+      sendTychsTask.run()
+    }
+  }
+  launch {
+    while (true) {
+      delay((SECOND_TO_MILLIS / SCOREBOARD_REFRESH_PER_SEC).toLong(), kotlinx.coroutines.experimental.timeunit.TimeUnit.MILLISECONDS)
+      sendScoreboardTask.run()
+    }
+  }
+  launch {
+    while (true) {
+      delay((SECOND_TO_MILLIS / LOG_REFRESH_PER_SEC).toLong(), kotlinx.coroutines.experimental.timeunit.TimeUnit.MILLISECONDS)
+      logTask.run()
+    }
+  }
 }

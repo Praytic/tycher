@@ -3,7 +3,7 @@ import java.util.*
 
 plugins {
     base
-    kotlin("jvm") version "1.2.31" apply false
+    kotlin("jvm") version "1.2.61" apply false
     id("jp.classmethod.aws") version "0.30"
 }
 

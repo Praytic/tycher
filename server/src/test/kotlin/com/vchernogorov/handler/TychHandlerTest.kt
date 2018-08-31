@@ -65,12 +65,12 @@ class TychHandlerTest {
     with(tychHandler) {
       handle(tych2.tycher, mock(Session::class.java), tych2)
       assertTrue(tychs.contains(tych2.tycher), "New $tych2 should appear in the map.")
-      assertEquals(tasks.size, 1, "New task for $tych2 should be started.")
-      val task2 = tasks.values.first()
+      assertEquals(jobs.size, 1, "New task for $tych2 should be started.")
+      val task2 = jobs.values.first()
 
       handle(tych1.tycher, mock(Session::class.java), tych1)
       assertTrue(tychs.contains(tych1.tycher), "$tych1 should appear in the map")
-      assertEquals(tasks.size, 1, "The task for $tych2 should be removed from the map.")
+      assertEquals(jobs.size, 1, "The task for $tych2 should be removed from the map.")
       assertFalse(tychs.contains(tych2.tycher), "Thus $tych1 consumed $tych2, it should be removed from the map.")
 
       assertFalse(task2.cancel(), "Task can't be canceled because it was already canceled.")
