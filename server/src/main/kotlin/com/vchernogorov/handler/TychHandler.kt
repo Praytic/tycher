@@ -16,7 +16,7 @@ class TychHandler(val tychs: MutableMap<User, Tych>,
   override fun parse(message: JsonElement) =
       gson.fromJson(message, Tych::class.java)
 
-  override fun handle(user: User, session: Session, message: Tych) {
+  override fun handle(user: User, session: Session, message: Tych): Boolean {
     log.info { "Handling $message." }
     val tych = Tych(message.position, message.spawnTime, user)
     if (user.isClickable(tychs[user])) {
@@ -27,6 +27,9 @@ class TychHandler(val tychs: MutableMap<User, Tych>,
       }
       val job = tychs.putTemp(user, tych)
       jobs[tych] = job
+      return true
+    } else {
+      return false
     }
   }
 

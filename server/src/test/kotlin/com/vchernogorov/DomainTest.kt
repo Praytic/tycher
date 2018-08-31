@@ -1,7 +1,6 @@
 package com.vchernogorov
 
 import com.vchernogorov.GameConf.SECOND_TO_MILLIS
-import com.vchernogorov.PlayerConf.START_SCORE
 import com.vchernogorov.TychConf.SCORE_TO_RADIUS_RATE
 import org.junit.Test
 import java.util.*
@@ -21,8 +20,8 @@ class TychTest {
   @Test
   fun test1() {
     val now = Date()
-    val tych1 = Tych(tycher = User(score = START_SCORE), spawnTime = now.time)
-    val tych2 = Tych(tycher = User(score = START_SCORE - 1), spawnTime = now.time)
+    val tych1 = Tych(spawnTime = now.time)
+    val tych2 = Tych(tycher = User(score = tych1.score - 1), spawnTime = now.time)
 
     assertTrue(tych2.getCurrentRadius(now) < tych1.getCurrentRadius(now),
                "Initial radius of $tych1 should be greater than $tych2 " +
@@ -41,8 +40,8 @@ class TychTest {
   fun test2() {
     val now = Date()
     val future = Date(now.time + 1)
-    val tych1 = Tych(tycher = User(score = START_SCORE), spawnTime = now.time)
-    val tych2 = Tych(tycher = User(score = START_SCORE - 1), spawnTime = now.time)
+    val tych1 = Tych(spawnTime = now.time)
+    val tych2 = Tych(tycher = User(score = tych1.score - 1), spawnTime = now.time)
 
     val actualCurrentRadius1 = tych1.getCurrentRadius(future)
     val actualCurrentRadius2 = tych2.getCurrentRadius(future)
@@ -63,8 +62,8 @@ class TychTest {
   @Test
   fun test3() {
     val now = Date()
-    val tych1 = Tych(tycher = User(score = START_SCORE), spawnTime = now.time)
-    val tych2 = Tych(tycher = User(score = START_SCORE), spawnTime = now.time)
+    val tych1 = Tych(spawnTime = now.time)
+    val tych2 = Tych(tycher = User(score = tych1.score), spawnTime = now.time)
 
     assertTrue(tych2.getCurrentRadius(now) == tych1.getCurrentRadius(now),
                "Initial radius of $tych1 should be greater than $tych2's " +
@@ -83,7 +82,7 @@ class TychTest {
   fun test4() {
     val now = Date()
     val future = Date(now.time + defaultTimePast * SECOND_TO_MILLIS.toLong())
-    val tych1 = Tych(tycher = User(score = START_SCORE), spawnTime = now.time)
+    val tych1 = Tych(spawnTime = now.time)
 
     val actualCurrentRadius1 = tych1.getCurrentRadius(future)
 
@@ -97,12 +96,11 @@ class TychTest {
   @Test
   fun test5() {
     val now = Date()
-    val tych1 = Tych(position = Position(1.0, 1.0),
-            tycher = User(score = START_SCORE),
-            spawnTime = now.time)
-    val tych2 = Tych(position = Position(0.0, 0.0),
-            tycher = User(score = START_SCORE - 1),
-            spawnTime = now.time)
+    val tych1 = Tych(spawnTime = now.time)
+    val tych2 = Tych(
+        position = Position(tych1.position.x + 1, tych1.position.y + 1),
+        tycher = User(score = tych1.score - 1),
+        spawnTime = now.time)
 
     assertTrue(!tych2.isConsumedBy(tych1),
                "Although $tych1 has greater radius than $tych2, it" +
@@ -116,12 +114,11 @@ class TychTest {
   @Test
   fun test6() {
     val now = Date()
-    val tych1 = Tych(position = Position(1.0, 1.0),
-            tycher = User(score = START_SCORE),
-            spawnTime = now.time)
-    val tych2 = Tych(position = Position(0.0, 0.0),
-            tycher = User(score = (START_SCORE - 2 / SCORE_TO_RADIUS_RATE).toInt()),
-            spawnTime = now.time)
+    val tych1 = Tych(spawnTime = now.time)
+    val tych2 = Tych(
+        position = Position(tych1.position.x + 1, tych1.position.y + 1),
+        tycher = User(score = (tych1.score - 2 / SCORE_TO_RADIUS_RATE).toInt()),
+        spawnTime = now.time)
 
     assertTrue(tych2.isConsumedBy(tych1),
                "Although $tych1 and $tych2 have different position," +
@@ -134,12 +131,8 @@ class TychTest {
   @Test
   fun test7() {
     val now = Date()
-    val tych1 = Tych(position = Position(0.0, 0.0),
-        tycher = User(score = START_SCORE),
-        spawnTime = now.time)
-    val tych2 = Tych(position = Position(0.0, 0.0),
-        tycher = User(score = START_SCORE - 1),
-        spawnTime = now.time)
+    val tych1 = Tych(spawnTime = now.time)
+    val tych2 = Tych(tycher = User(score = tych1.score - 1), spawnTime = now.time)
     
     assertTrue(tych2.getAllConsumedTychs(listOf(tych1, tych2)).isEmpty(),
         "$tych2 has the lowest score so it should consume nothing.")

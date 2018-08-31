@@ -12,8 +12,9 @@ class LoginHandler : MessageHandler<User>() {
   override fun parse(message: JsonElement) =
       gson.fromJson(message, User::class.java)
 
-  override fun handle(user: User, session: Session, message: User) {
+  override fun handle(user: User, session: Session, message: User): Boolean {
     users[session] = User(name = message.name)
     log.info { "User ${message.name} logged in." }
+    return true
   }
 }

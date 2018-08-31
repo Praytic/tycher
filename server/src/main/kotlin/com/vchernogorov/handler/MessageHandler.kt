@@ -17,9 +17,9 @@ abstract class MessageHandler<V : Message> {
    *
    * @throws IllegalStateException when [User] is not authorized.
    */
-  fun handle(session: Session, message: JsonElement) {
+  fun handle(session: Session, message: JsonElement): Boolean {
     val user = users[session] ?: throw IllegalStateException("Tycher can't be an unauthorized user.")
-    handle(user, session, parse(message))
+    return handle(user, session, parse(message))
   }
 
   abstract fun parse(message: JsonElement): V
@@ -27,5 +27,5 @@ abstract class MessageHandler<V : Message> {
   /**
    * Handles a generic [Message] provided by [User].
    */
-  abstract fun handle(user: User, session: Session, message: V)
+  abstract fun handle(user: User, session: Session, message: V): Boolean
 }

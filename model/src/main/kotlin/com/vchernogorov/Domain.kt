@@ -21,7 +21,7 @@ class Tych(
    * Returns how much milliseconds left for this [Tych] to be removed.
    */
   fun getLifeDurationMillis(now: Date = Date()) =
-      (getCurrentRadius(now) / getShrinkSpeedRadius() * SECOND_TO_MILLIS).toLong()
+      (getCurrentRadius(now) * SCORE_TO_RADIUS_RATE / getShrinkSpeedRadius() * SECOND_TO_MILLIS).toLong()
 
   /**
    * Returns current radius of the [Tych].

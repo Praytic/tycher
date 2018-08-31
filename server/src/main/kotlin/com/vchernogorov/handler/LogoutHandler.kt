@@ -12,9 +12,10 @@ class LogoutHandler : MessageHandler<User>() {
   override fun parse(message: JsonElement) =
       gson.fromJson(message, User::class.java)
 
-  override fun handle(user: User, session: Session, message: User) {
+  override fun handle(user: User, session: Session, message: User): Boolean {
     session.close(CloseStatus(4000,
             "Closed by request from ${message}."))
     log.info { "User ${user.name} logged out." }
+    return true
   }
 }

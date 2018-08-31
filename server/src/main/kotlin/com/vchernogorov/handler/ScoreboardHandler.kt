@@ -14,7 +14,8 @@ class ScoreboardHandler : MessageHandler<Scoreboard>() {
 
   override fun parse(message: JsonElement) = gson.fromJson(message, Scoreboard::class.java)
 
-  override fun handle(user: User, session: Session, message: Scoreboard) {
+  override fun handle(user: User, session: Session, message: Scoreboard): Boolean {
     session.remote.sendString(gson.toJsonMessage(message))
+    return true
   }
 }
