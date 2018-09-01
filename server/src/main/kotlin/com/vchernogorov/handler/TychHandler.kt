@@ -39,10 +39,10 @@ class TychHandler(val tychs: MutableMap<User, Tych>,
    */
   fun consumeTychsBy(user: User, tych: Tych): List<Tych> {
     val consumedTychs = tych.getAllConsumedTychs(tychs.values)
-    val gainedScore = consumedTychs.map { it to it.calculateScore() }.toMap()
+    val gainedScore = consumedTychs.map { it to it.getCurrentScore() }.toMap()
     user.score += gainedScore.values.sum()
     consumedTychs.forEach {
-      val tycherScore = it.calculateScore()
+      val tycherScore = it.getCurrentScore()
       val removedTych = tychs.remove(it.tycher)
           ?: throw UndefinedEntityException(tych)
       removedTych.tycher.score -= tycherScore

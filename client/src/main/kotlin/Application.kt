@@ -20,13 +20,13 @@ fun main(args: Array<String>) {
   startRenderLoop(1000, RENDERING_RATIO);
 }
 
-fun startRenderLoop(startDelayMillis: Int, periodMillis: Int) {
+fun startRenderLoop(startDelayMs: Int, periodMs: Int) {
   window.setTimeout({
     console.logWithTime("Starting render loop...")
     window.setInterval({
       canvas.renderBackground()
       canvas.renderTychs()
       canvas.renderScoreboard()
-    }, periodMillis)
-  }, startDelayMillis)
+    }, periodMs)
+  }, startDelayMs)
 }

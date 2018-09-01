@@ -55,17 +55,17 @@ class TychHandlerTest {
     val tych2 = Tych(tycher = User(score = tych1.score - 2), spawnTime = now.time)
 
     with(tychHandler) {
-      handle(tych2.tycher, mock(Session::class.java), tych2)
+      assertTrue(handle(tych2.tycher, mock(Session::class.java), tych2))
       assertTrue(tychs.contains(tych2.tycher), "New $tych2 should appear in the map.")
-      assertEquals(jobs.size, 1, "New task for $tych2 should be started.")
-      val task2 = jobs.values.first()
+      assertEquals(jobs.size, 1, "New job for $tych2 should be started.")
+      val job2 = jobs.values.first()
 
-      handle(tych1.tycher, mock(Session::class.java), tych1)
+      assertTrue(handle(tych1.tycher, mock(Session::class.java), tych1))
       assertTrue(tychs.contains(tych1.tycher), "$tych1 should appear in the map")
-      assertEquals(jobs.size, 1, "The task for $tych2 should be removed from the map.")
+      assertEquals(jobs.size, 1, "The job for $tych2 should be removed from the map.")
       assertFalse(tychs.contains(tych2.tycher), "Thus $tych1 consumed $tych2, it should be removed from the map.")
-
-      assertFalse(task2.cancel(), "Task can't be canceled because it was already canceled.")
+      
+      assertTrue(job2.isCancelled, "Job should be canceled because $tych2 was consumed.")
     }
   }
 
@@ -81,11 +81,11 @@ class TychHandlerTest {
       runBlocking {
         assertTrue(handle(tych1.tycher, mock(Session::class.java), tych1),
             "$tych1 should be successfully handled.")
-        delay(tych1.getLifeDurationMillis(now) / 2)
+        delay(tych1.getLifetimeMs() / 2)
         val tych2 = Tych(tycher = tych1.tycher, spawnTime = Date().time)
         assertFalse(handle(tych2.tycher, mock(Session::class.java), tych2),
             "$tych2 should not be handled by the same user because $tych1 is still alive.")
-        delay(tych1.getLifeDurationMillis(now) / 2)
+        delay(tych1.getLifetimeMs() / 2)
         val tych3 = Tych(tycher = tych1.tycher, spawnTime = Date().time)
         assertTrue(handle(tych3.tycher, mock(Session::class.java), tych3),
             "$tych3 should be successfully handled by the same user because $tych1 is dead.")

@@ -73,7 +73,6 @@ fun main(args: Array<String>) {
   if (appPort != null) {
     port(appPort.toInt())
   }
-  println(Tych().getDefaults())
   webSocket("/game", MainWebSocket::class.java)
   launch {
     startGameLoop();

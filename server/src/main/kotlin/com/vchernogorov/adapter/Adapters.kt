@@ -45,7 +45,7 @@ val tychAdapter = typeAdapter<Tych> {
     value(it.position.x)
     value(it.position.y)
     value(it.getCurrentRadius())
-    value(it.getScoreReductionPerMillis())
+    value(it.getScoreReductionPerMs())
     endArray()
   }
   read {

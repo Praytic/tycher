@@ -76,7 +76,7 @@ class TychTest {
   }
 
   /**
-   * [Tych.getScoreReductionPerMillis]
+   * [Tych.getScoreReductionPerMs]
    */
   @Test
   fun test4() {

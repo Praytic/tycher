@@ -29,20 +29,20 @@ inline fun <reified T : Message> Gson.toJsonMessage(src: List<T>, command: Comma
 }
 
 /**
- * Puts a [Tych] into [MutableMap] and removes it after [Tych.lifeDurationMillis].
+ * Puts a [Tych] into [MutableMap] and removes it after [Tych.lifeDurationMs].
  */
 fun <K> MutableMap<K, Tych>.putTemp(key: K, value: Tych, now: Date = Date()): Job {
   put(key, value)
-  val lifeDuration = value.getLifeDurationMillis(now)
+  val lifetime = value.getLifetimeMs()
 
   val job = launch {
-    delay(lifeDuration, TimeUnit.MILLISECONDS)
+    delay(lifetime, TimeUnit.MILLISECONDS)
     val currentValue = get(key)
     if (value == currentValue) {
       if (remove(key) != null) {
         val nowSeconds = TimeUnit.MILLISECONDS.toSeconds(Date().time)
         log.info {
-          "$value was removed after ${lifeDuration / GameConf.SECOND_TO_MILLIS} seconds. " +
+          "$value was removed after ${lifetime / GameConf.SECOND_TO_MILLIS} seconds. " +
               "Timestamp in seconds: $nowSeconds."
         }
       }
@@ -51,26 +51,10 @@ fun <K> MutableMap<K, Tych>.putTemp(key: K, value: Tych, now: Date = Date()): Jo
     }
   }
   val nowSeconds = TimeUnit.MILLISECONDS.toSeconds(now.time)
-  log.info { "$value will be removed after ${lifeDuration / GameConf.SECOND_TO_MILLIS} seconds. " +
+  log.info { "$value will be removed after ${lifetime / GameConf.SECOND_TO_MILLIS} seconds. " +
       "Timestamp in seconds: $nowSeconds." }
   return job
 }
-
-/**
- * Returns default values for each field in a [Tych].
- * Should be manually updated after adding/removing/renaming a field.
- */
-fun Tych.getDefaults() = mutableMapOf(
-      "ScoreReductionPerMillis" to getScoreReductionPerMillis(),
-      "Radius" to getRadius(),
-      "ShrinkSpeedRadius" to getShrinkSpeedRadius(),
-      "LifeDurationMillis" to getLifeDurationMillis(),
-      "CurrentRadius" to getCurrentRadius(),
-      "LifetimeMillis" to getLifeDurationMillis(),
-      "tycher" to tycher,
-      "position" to position,
-      "spawnTime" to spawnTime
-)
 
 fun getActiveUsers(): Map<Session, User> = users
     .filter { it.key.isOpen }

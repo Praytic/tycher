@@ -1,10 +1,11 @@
 package com.vchernogorov
 
-import com.vchernogorov.GameConf.SECOND_TO_MILLIS
+import com.vchernogorov.TychConf.DYNAMIC_LIFETIME_MS
+import com.vchernogorov.TychConf.DYNAMIC_SCORE_TO_RADIUS_RATE
+import com.vchernogorov.TychConf.LIFETIME_MS
 import com.vchernogorov.TychConf.SCORE_TO_RADIUS_RATE
-import com.vchernogorov.TychConf.SCORE_TO_SHRINK_SPEED_RATE
-import com.vchernogorov.TychConf.STATIC_SHRINK_SPEED
-import com.vchernogorov.TychConf.USE_STATIC_SHRINK_SPEED
+import com.vchernogorov.TychConf.USE_STATIC_LIFETIME
+import com.vchernogorov.TychConf.USE_STATIC_RADIUS_RATE
 import java.util.*
 
 /**
@@ -18,32 +19,45 @@ class Tych(
     val score: Int = tycher.score) : Circle(position, spawnTime) {
 
   /**
-   * Returns how much milliseconds left for this [Tych] to be removed.
-   */
-  fun getLifeDurationMillis(now: Date = Date()) =
-      (getCurrentRadius(now) * SCORE_TO_RADIUS_RATE / getShrinkSpeedRadius() * SECOND_TO_MILLIS).toLong()
-
-  /**
    * Returns current radius of the [Tych].
+   * Formula: max(radius - (score / ms) * ms / (score / radius))
    */
   override fun getCurrentRadius(now: Date) =
-      Math.max(getRadius() - getScoreReductionPerMillis() * getLifetimeMillis(now) / SECOND_TO_MILLIS, 0.0)
+      Math.max(getRadius() - getScoreReductionPerMs() * getLifetimeMs(now) / getScoreToRadiusRate(), 0.0)
 
   /**
    * Returns score reduction rate for the [Tych] per millisecond.
+   * Formula: score / ms
    */
-  fun getScoreReductionPerMillis() = if (USE_STATIC_SHRINK_SPEED) STATIC_SHRINK_SPEED else
-    score * SCORE_TO_SHRINK_SPEED_RATE
+  fun getScoreReductionPerMs() = score.toDouble() / getLifetimeMs()
+
+  /**
+   * Formula: ms
+   */
+  fun getLifetimeMs() = if (USE_STATIC_LIFETIME) LIFETIME_MS else DYNAMIC_LIFETIME_MS(score)
 
   /**
    * Returns radius reduction rate for the [Tych] per millisecond.
+   * Formula: (score / ms) / (score / radius) = radius / ms
    */
-  fun getShrinkSpeedRadius() = getScoreReductionPerMillis() * SCORE_TO_RADIUS_RATE
+  fun getRadiusReductionPerMs() = getScoreReductionPerMs() / getScoreToRadiusRate()
 
   /**
    * Returns initial [Tych] radius.
+   * Formula: score / (score / radius) = radius
    */
-  fun getRadius() = score * SCORE_TO_RADIUS_RATE
+  fun getRadius() = score / getScoreToRadiusRate()
+
+  /**
+   * Returns a current score of the [Circle] depending on [currentRadius].
+   * Formula: radius * (score / radius) = score
+   */
+  fun getCurrentScore(now: Date = Date()) = (getCurrentRadius(now) * getScoreToRadiusRate()).toInt()
+
+  /**
+   * Formula: score / radius
+   */
+  fun getScoreToRadiusRate() = if (USE_STATIC_RADIUS_RATE) SCORE_TO_RADIUS_RATE else DYNAMIC_SCORE_TO_RADIUS_RATE(score)
 
   /**
    * Returns a list of [Tych]s which are [isConsumedBy] the current [Tych].
@@ -67,7 +81,7 @@ abstract class Circle(
   /**
    * Returns how much milliseconds ago this [Tych] was created.
    */
-  fun getLifetimeMillis(now: Date = Date()) = now.time - spawnTime
+  fun getLifetimeMs(now: Date = Date()) = now.time - spawnTime
 
   /**
    * Returns current radius of the [Circle].
@@ -89,11 +103,6 @@ abstract class Circle(
 
     return distance < r1 - r2
   }
-
-  /**
-   * Returns a current score of the [Circle] depending on [currentRadius].
-   */
-  fun calculateScore(now: Date = Date()) = (getCurrentRadius(now) / SCORE_TO_RADIUS_RATE).toInt()
 
   override fun toString(): String {
     return "com.vchernogorov.Circle(position=$position, spawnTime=$spawnTime)"
