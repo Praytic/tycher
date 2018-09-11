@@ -4,7 +4,6 @@ import kotlin.math.log10
 
 object GameConf {
   const val SECOND_TO_MILLIS = 1000.0
-  const val TIMER_DELAY_MS = SECOND_TO_MILLIS.toLong()
   const val TYCH_REFRESH_PER_SEC = 100
   const val SCOREBOARD_REFRESH_PER_SEC = 1
   const val LOG_REFRESH_PER_SEC = 0.2
@@ -12,7 +11,7 @@ object GameConf {
 
 object PlayerConf {
   const val START_SCORE = 100
-  const val SCOREBOARD_LIMIT = 50
+  const val SCOREBOARD_LIMIT = 10
 }
 
 object TychConf {

@@ -22,17 +22,21 @@ fun initWebSocket(): WebSocket {
     }
 
     onmessage = { event ->
-      val message = JSON.parse<Json>(event.asDynamic().data)
-      val newTychs = message.asDynamic().tychs
+      val message = JSON.parse<Json>(event.asDynamic().data).asDynamic()
+      val newTychs = message.tychs
       if (newTychs != null) {
         val convertedTychs = convertToTychs(newTychs)
         tychs.clear()
         tychs.putAll(convertedTychs.map { it.position to it })
       }
-      val sb = message.asDynamic().scoreboard
+      val sb = message.scoreboard
       if (sb != null) {
         scoreboard.clear()
         scoreboard.putAll(convertToScoreboard(sb).values)
+      }
+      val ptych = message.playerTych
+      if (ptych != null) {
+        playerTych = convertToTych(ptych)
       }
       event
     }

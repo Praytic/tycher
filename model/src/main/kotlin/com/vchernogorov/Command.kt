@@ -14,6 +14,7 @@ enum class Command {
     TYCHS,
     DUMMY_TYCH,
     REMOVE_TYCH,
+    PLAYER_TYCH,
     LOGIN,
     LOGOUT,
     SCOREBOARD,
